@@ -69,10 +69,10 @@ export function Products() {
               product={{
                 id: urun.slug,
                 name: urun.ad,
-                description: urun.ozellikleri?.[0] || urun.aciklama || '',
+                description: urun.özellikleri?.[0] || urun.aciklama || '',
                 price: urun.fiyat,
                 category: urun.kategoriler?.[0] || '',
-                features: urun.ozellikleri || [],
+                features: urun.özellikleri || [],
                 image: urun.gorsel,
                 badge: urun.stok_durumu === 'stokta' ? 'Stokta' : null,
               }}
