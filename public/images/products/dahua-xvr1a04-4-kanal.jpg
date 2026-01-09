@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+    <defs>
+      <linearGradient id="grad-dahua-xvr1a04-4-kanal" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1" />
+        <stop offset="100%" style="stop-color:#000;stop-opacity:1" />
+      </linearGradient>
+    </defs>
+    <rect width="400" height="400" fill="url(#grad-dahua-xvr1a04-4-kanal)"/>
+    
+    <!-- Product shape placeholder -->
+    <rect x="80" y="60" width="240" height="280" fill="none" stroke="#fff" stroke-width="2" rx="10"/>
+    <circle cx="200" cy="150" r="40" fill="#fff" opacity="0.1"/>
+    <rect x="100" y="220" width="200" height="80" fill="#fff" opacity="0.05" rx="5"/>
+    
+    <!-- Dahua logo text -->
+    <text x="200" y="350" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#fff" text-anchor="middle" opacity="0.9">DAHUA</text>
+    
+    <!-- Product label -->
+    <text x="200" y="380" font-family="Arial, sans-serif" font-size="16" fill="#ccc" text-anchor="middle" opacity="0.8">XVR 4CH</text>
+  </svg>
