@@ -46,7 +46,7 @@ export function Testimonials() {
             <span className="text-foreground">Mutlu Müşteri</span>
           </h2>
           <p className="text-lg text-foreground-secondary leading-relaxed">
-            Optinum Güvenlik ile güvenliklerini dönüştüren müşterilerimizden dinleyin. 
+            Mat Tech ile güvenliklerini dönüştüren müşterilerimizden dinleyin. 
             Gerçek insanlardan gerçek hikayeler.
           </p>
         </motion.div>

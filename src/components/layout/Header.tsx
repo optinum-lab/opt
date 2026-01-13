@@ -108,10 +108,32 @@ export function Header() {
                   )}>
                     {navLinks.map((link) => {
                       const isActive = activeSection === link.href.replace('#', '');
+                      
+                      const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+                        if (link.href.startsWith('#')) {
+                          e.preventDefault();
+                          const targetId = link.href.replace('#', '');
+                          
+                          // Eğer ana sayfada değilsek, önce ana sayfaya git
+                          if (window.location.pathname !== '/') {
+                            window.location.href = '/' + link.href;
+                          } else {
+                            // Ana sayfadaysak direkt scroll et
+                            const element = document.getElementById(targetId);
+                            if (element) {
+                              element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                              setActiveSection(targetId);
+                            }
+                          }
+                        }
+                        setIsMobileMenuOpen(false);
+                      };
+                      
                       return (
                         <Link
                           key={link.href}
-                          href={link.href}
+                          href={link.href.startsWith('#') ? '/' + link.href : link.href}
+                          onClick={handleClick}
                           className={cn(
                             'relative px-4 py-2 text-sm font-medium rounded-full transition-all duration-300',
                             isActive 
@@ -259,10 +281,28 @@ export function Header() {
                       ease: [0.25, 0.46, 0.45, 0.94]
                     }}
                   >
-                    <Link
-                      href={link.href}
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="group block py-4 border-b border-foreground/5 dark:border-white/5"
+                    <a
+                      href={link.href.startsWith('#') ? '/' + link.href : link.href}
+                      onClick={(e) => {
+                        if (link.href.startsWith('#')) {
+                          e.preventDefault();
+                          const targetId = link.href.replace('#', '');
+                          
+                          // Eğer ana sayfada değilsek, önce ana sayfaya git
+                          if (window.location.pathname !== '/') {
+                            window.location.href = '/' + link.href;
+                          } else {
+                            // Ana sayfadaysak direkt scroll et
+                            const element = document.getElementById(targetId);
+                            if (element) {
+                              element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                              setActiveSection(targetId);
+                            }
+                          }
+                        }
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="group block py-4 border-b border-foreground/5 dark:border-white/5 cursor-pointer"
                     >
                       <div className="flex items-center justify-between">
                         <span className="text-3xl md:text-4xl font-semibold text-foreground group-hover:text-[#E31E24] transition-colors duration-300">
@@ -276,7 +316,7 @@ export function Header() {
                           <Icon name="arrowRight" size={20} className="text-[#E31E24]" />
                         </motion.div>
                       </div>
-                    </Link>
+                    </a>
                   </motion.div>
                 ))}
               </nav>

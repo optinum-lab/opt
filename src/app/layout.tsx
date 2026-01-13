@@ -10,6 +10,8 @@ import { ThemeProvider } from '@/components/layout/ThemeProvider';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { WhatsAppSupport } from '@/components/WhatsAppSupport';
+import { OrganizationSchema, WebsiteSchema } from '@/components/seo';
+import { GoogleAnalytics, GoogleTagManager } from '@/components/analytics';
 
 // ============================================
 // Font Configuration
@@ -26,50 +28,67 @@ const inter = Inter({
 // ============================================
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://optinumguvenlik.com'),
+  metadataBase: new URL('https://www.mattech.com.tr'),
   title: {
-    default: 'Optinum Güvenlik | Yapay Zeka Destekli Premium Güvenlik Çözümleri',
-    template: '%s | Optinum Güvenlik',
+    default: 'Mat Tech | Profesyonel Güvenlik Kamera Sistemleri ve CCTV Çözümleri',
+    template: '%s | Mat Tech',
   },
   description:
-    'Evler ve işletmeler için gelişmiş yapay zeka destekli güvenlik çözümleri. 4K kameralar, akıllı uyarılar ve bulut kayıt ile yeni nesil gözetimi deneyimleyin.',
+    'Dahua ve Hikvision markaları ile profesyonel güvenlik kamera sistemleri. Ev ve işyeri için IP kamera, DVR, NVR kurulum ve teknik destek hizmetleri. ✓ 7/24 Destek ✓ Ücretsiz Keşif',
   keywords: [
+    'güvenlik kamerası',
     'CCTV',
-    'güvenlik kameraları',
-    'akıllı güvenlik',
-    'yapay zeka gözetim',
-    'ev güvenliği',
-    'işletme güvenliği',
-    '4K kameralar',
-    'bulut kayıt',
+    'IP kamera',
+    'güvenlik kamera sistemleri',
+    'Dahua kamera',
+    'Hikvision kamera',
+    'DVR',
+    'NVR',
+    'kamera kurulumu',
+    'güvenlik sistemleri',
+    'kayıt cihazı',
+    'alarm sistemi',
+    'access kontrol',
+    'güvenlik ekipmanları',
+    'ev güvenlik kamerası',
+    'işyeri güvenlik kamerası',
+    'gece görüşlü kamera',
+    'dış mekan kamera',
+    'iç mekan kamera',
+    'kablosuz kamera',
   ],
-  authors: [{ name: 'Optinum Güvenlik' }],
-  creator: 'Optinum Güvenlik',
-  publisher: 'Optinum Güvenlik',
+  authors: [{ name: 'Mat Tech' }],
+  creator: 'Mat Tech',
+  publisher: 'Mat Tech',
+  alternates: {
+    canonical: 'https://www.mattech.com.tr',
+  },
   openGraph: {
     type: 'website',
     locale: 'tr_TR',
-    url: 'https://optinumguvenlik.com',
-    siteName: 'Optinum Güvenlik',
-    title: 'Optinum Güvenlik | Yapay Zeka Destekli Premium Güvenlik Çözümleri',
+    url: 'https://www.mattech.com.tr',
+    siteName: 'Mat Tech',
+    title: 'Mat Tech | Profesyonel Güvenlik Kamera Sistemleri',
     description:
-      'Evler ve işletmeler için gelişmiş yapay zeka destekli güvenlik çözümleri. 4K kameralar, akıllı uyarılar ve bulut kayıt ile yeni nesil gözetimi deneyimleyin.',
+      'Dahua ve Hikvision güvenlik kamera sistemleri. Ev ve işyeri için profesyonel CCTV kurulum ve teknik destek. ✓ 10+ Yıl Tecrübe ✓ 7/24 Hizmet',
     images: [
       {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'Optinum Güvenlik - Premium Güvenlik Çözümleri',
+        alt: 'Mat Tech - Profesyonel Güvenlik Kamera Sistemleri',
+        type: 'image/png',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Optinum Güvenlik | Yapay Zeka Destekli Premium Güvenlik Çözümleri',
+    title: 'Mat Tech | Profesyonel Güvenlik Kamera Sistemleri',
     description:
-      'Evler ve işletmeler için gelişmiş yapay zeka destekli güvenlik çözümleri.',
-    creator: '@optinumguvenlik',
+      'Dahua ve Hikvision güvenlik kamera sistemleri. Profesyonel kurulum ve 7/24 teknik destek.',
+    creator: '@mattech',
     images: ['/og-image.png'],
+    site: '@mattech',
   },
   robots: {
     index: true,
@@ -82,11 +101,29 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || 'hrZzcJR_U1ZjiSf0soDeQSdWLcKZei0SLBMzEu4gCAc',
+  },
   icons: {
     icon: '/favicon.ico',
     shortcut: '/favicon-16x16.png',
     apple: '/apple-touch-icon.png',
+    other: [
+      {
+        rel: 'icon',
+        type: 'image/png',
+        sizes: '192x192',
+        url: '/web-app-manifest-192x192.png',
+      },
+      {
+        rel: 'icon',
+        type: 'image/png',
+        sizes: '512x512',
+        url: '/web-app-manifest-512x512.png',
+      },
+    ],
   },
+  manifest: '/manifest.json',
 };
 
 export const viewport: Viewport = {
@@ -109,7 +146,31 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="tr" suppressHydrationWarning>
+      <head>
+        {/* Google Tag Manager */}
+        {process.env.NEXT_PUBLIC_GTM_ID && (
+          <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM_ID} />
+        )}
+        
+        <OrganizationSchema />
+        <WebsiteSchema />
+        {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
+          <GoogleAnalytics measurementId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID} />
+        )}
+      </head>
       <body className={`${inter.variable} font-sans antialiased`}>
+        {/* Google Tag Manager (noscript) */}
+        {process.env.NEXT_PUBLIC_GTM_ID && (
+          <noscript>
+            <iframe
+              src={`https://www.googletagmanager.com/ns.html?id=${process.env.NEXT_PUBLIC_GTM_ID}`}
+              height="0"
+              width="0"
+              style={{ display: 'none', visibility: 'hidden' }}
+            />
+          </noscript>
+        )}
+        
         <ThemeProvider>
           {/* Skip to main content link for accessibility */}
           <a

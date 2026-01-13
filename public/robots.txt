@@ -1,0 +1,22 @@
+# robots.txt for https://www.mattech.com.tr
+
+User-agent: *
+Allow: /
+
+# Disallow admin and private areas
+Disallow: /api/
+Disallow: /admin/
+Disallow: /_next/
+Disallow: /static/
+
+# Allow important pages
+Allow: /urunler/
+Allow: /urunler/kategori/
+Allow: /urunler/detail/
+Allow: /yasal/
+
+# Sitemap location
+Sitemap: https://www.mattech.com.tr/sitemap.xml
+
+# Crawl-delay (optional, for courtesy)
+Crawl-delay: 1

@@ -1,6 +1,6 @@
 /**
  * Site Constants
- * Centralized configuration and dummy data for Optinum Güvenlik
+ * Centralized configuration and dummy data for Mat Tech
  */
 
 // ============================================
@@ -8,21 +8,21 @@
 // ============================================
 
 export const siteConfig = {
-  name: 'Optinum Güvenlik',
+  name: 'Mat Tech',
   description: 'Evler ve işletmeler için profesyonel CCTV güvenlik sistemleri. 10+ yıllık tecrübe, 5.000\'den fazla mutlu müşteri ve %99.9 kesintisiz hizmet garantisi.',
-  url: 'https://optinumguvenlik.com',
+  url: 'https://www.mattech.com.tr',
   ogImage: '/og-image.png',
   links: {
-    twitter: 'https://twitter.com/optinumguvenlik',
-    linkedin: 'https://linkedin.com/company/optinumguvenlik',
-    facebook: 'https://facebook.com/optinumguvenlik',
-    instagram: 'https://instagram.com/optinumguvenlik',
-    youtube: 'https://youtube.com/optinumguvenlik',
-    tiktok: 'https://tiktok.com/@optinumguvenlik',
+    twitter: 'https://twitter.com/mattech',
+    linkedin: 'https://linkedin.com/company/mattech',
+    facebook: 'https://facebook.com/mattech',
+    instagram: 'https://instagram.com/mattech',
+    youtube: 'https://youtube.com/mattech',
+    tiktok: 'https://tiktok.com/@mattech',
     whatsapp: 'https://wa.me/905454506587',
   },
   contact: {
-    email: 'info@optinumguvenlik.com',
+    email: 'info@mattech.com.tr',
     phone: '+90 545 450 65 87',
     address: 'Perpa Ticaret Merkezi, A Blok Kat:9 No:1288, Şişli/İstanbul',
     mapUrl: 'https://maps.app.goo.gl/MDr3VLmZyjXjFTvy8',
@@ -216,7 +216,7 @@ export const testimonials = [
     name: 'Ayşe Yılmaz',
     role: 'Ev Sahibi',
     company: 'Akıllı Ev Kullanıcısı',
-    content: 'Optinum Güvenlik, ev güvenliğine bakış açımı tamamen değiştirdi. Yapay zeka algılama inanılmaz derecede doğru ve evimi her yerden kontrol edebilmek harika.',
+    content: 'Mat Tech, ev güvenliğine bakış açımı tamamen değiştirdi. Yapay zeka algılama inanılmaz derecede doğru ve evimi her yerden kontrol edebilmek harika.',
     avatar: '/images/testimonials/avatar-1.jpg',
     rating: 5,
   },
@@ -225,7 +225,7 @@ export const testimonials = [
     name: 'Mehmet Kaya',
     role: 'Operasyon Direktörü',
     company: 'TechStart A.Ş.',
-    content: 'Üç ofis lokasyonumuza Optinum Güvenlik sistemlerini kurduk. Entegrasyon sorunsuzdu ve görüntü kalitesi iş yeri güvenliğimizi önemli ölçüde artırdı.',
+    content: 'Üç ofis lokasyonumuza Mat Tech sistemlerini kurduk. Entegrasyon sorunsuzdu ve görüntü kalitesi iş yeri güvenliğimizi önemli ölçüde artırdı.',
     avatar: '/images/testimonials/avatar-2.jpg',
     rating: 5,
   },
@@ -234,7 +234,7 @@ export const testimonials = [
     name: 'Elif Demir',
     role: 'Site Yöneticisi',
     company: 'Park Evleri Sitesi',
-    content: '200\'den fazla daire için güvenlik yönetmek eskiden kabustu. Optinum Güvenlik merkezi kontrol paneli her şeyi zahmetsiz hale getirdi. Yaptığımız en iyi yatırım.',
+    content: '200\'den fazla daire için güvenlik yönetmek eskiden kabustu. Mat Tech merkezi kontrol paneli her şeyi zahmetsiz hale getirdi. Yaptığımız en iyi yatırım.',
     avatar: '/images/testimonials/avatar-3.jpg',
     rating: 5,
   },
@@ -243,7 +243,7 @@ export const testimonials = [
     name: 'Ali Öztürk',
     role: 'İşletme Sahibi',
     company: 'Öztürk Market',
-    content: 'Geçen yılki hırsızlık girişiminden sonra Optinum Güvenlik\'e geçtik. Gece görüşü kalitesi muhteşem ve anlık uyarılar market kapalıyken bile bize huzur veriyor.',
+    content: 'Geçen yılki hırsızlık girişiminden sonra Mat Tech\'e geçtik. Gece görüşü kalitesi muhteşem ve anlık uyarılar market kapalıyken bile bize huzur veriyor.',
     avatar: '/images/testimonials/avatar-4.jpg',
     rating: 5,
   },

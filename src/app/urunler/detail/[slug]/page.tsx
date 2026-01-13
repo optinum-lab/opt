@@ -18,6 +18,7 @@ import {
   stokRengiBul,
   fiyatiFormatla
 } from "@/lib/product-utils";
+import { formatSlug } from "@/lib/utils";
 import { fadeUp, staggerContainer, staggerChild } from "@/lib/animations";
 
 export default function UrunDetayPage() {
@@ -27,7 +28,6 @@ export default function UrunDetayPage() {
   const [urun, setUrun] = useState<Urun | null>(null);
   const [yukleniyor, setYukleniyor] = useState(true);
   const [hata, setHata] = useState<string | null>(null);
-  const [aktifTab, setAktifTab] = useState<"ozellikleri" | "teknik">("ozellikleri");
 
   useEffect(() => {
     const veriYukle = async () => {
@@ -136,20 +136,11 @@ export default function UrunDetayPage() {
                     priority
                   />
                 </div>
-                {/* Stok Badge */}
+                {/* Stock Status */}
                 <div className="absolute top-6 right-6">
-                  <Badge
-                    variant={
-                      urun.stok_durumu === "Uygun"
-                        ? "default"
-                        : urun.stok_durumu === "Sınırlı"
-                        ? "warning"
-                        : "primary"
-                    }
-                    className={`text-sm px-3 py-1 ${stokRengiBul(urun.stok_durumu)}`}
-                  >
-                    {urun.stok_durumu}
-                  </Badge>
+                  <span className="text-[11px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-md bg-red-500 text-white">
+                    STOKTA
+                  </span>
                 </div>
               </div>
             </motion.div>
@@ -175,9 +166,9 @@ export default function UrunDetayPage() {
               <div className="flex flex-wrap gap-2 mb-8">
                 {urun.kategoriler.map((kat) => (
                   <Link key={kat} href={`/urunler/kategori/${kat}`}>
-                    <Badge variant="primary" className="cursor-pointer hover:bg-red-500 hover:text-white transition-colors">
-                      {kat.replace("-", " ")}
-                    </Badge>
+                    <span className="inline-block px-4 py-2 rounded-md bg-red-500/10 text-red-600 font-semibold uppercase tracking-wider cursor-pointer hover:bg-red-500/20 transition-colors">
+                      {formatSlug(kat)}
+                    </span>
                   </Link>
                 ))}
               </div>
@@ -234,65 +225,29 @@ export default function UrunDetayPage() {
             transition={{ delay: 0.3 }}
             className="mt-16 pt-12 border-t border-card-border"
           >
-            {/* Tab Kontrolleri */}
-            <div className="flex gap-4 mb-8 border-b border-card-border">
-              {[
-                { id: "ozellikleri" as const, label: "Özellikler" },
-                { id: "teknik" as const, label: "Teknik Bilgiler" },
-              ].map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setAktifTab(tab.id)}
-                  className={`px-6 py-3 font-semibold transition-colors relative ${
-                    aktifTab === tab.id
-                      ? "text-red-500"
-                      : "text-foreground-secondary hover:text-foreground"
-                  }`}
-                >
-                  {tab.label}
-                  {aktifTab === tab.id && (
-                    <div className="absolute bottom-0 left-0 right-0 h-1 bg-red-500 rounded-full" />
-                  )}
-                </button>
-              ))}
-            </div>
+            {/* Başlık */}
+            <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-8">
+              Teknik Bilgiler
+            </h2>
 
             {/* Tab İçeriği */}
-            {aktifTab === "ozellikleri" && (
-              <motion.div
-                variants={staggerContainer}
-                initial="hidden"
-                animate="visible"
-                className="grid grid-cols-1 md:grid-cols-2 gap-4"
-              >
-                {urun.özellikleri?.map((oz, idx) => (
-                  <motion.div key={idx} variants={staggerChild} className="flex items-start gap-3 p-4 bg-card rounded-lg">
-                    <Icon name="check-circle" size={20} className="text-red-500 shrink-0 mt-0.5" />
-                    <span className="text-foreground">{oz}</span>
-                  </motion.div>
-                ))}
-              </motion.div>
-            )}
-
-            {aktifTab === "teknik" && (
-              <motion.div
-                variants={staggerContainer}
-                initial="hidden"
-                animate="visible"
-                className="grid grid-cols-1 md:grid-cols-2 gap-6"
-              >
-                {Object.entries(urun.teknik_ozellikler || {}).map(([key, value]) => (
-                  <motion.div key={key} variants={staggerChild} className="p-6 bg-card rounded-lg border border-card-border">
-                    <h4 className="text-sm font-semibold text-foreground-secondary uppercase mb-2">
-                      {key.replace(/_/g, " ")}
-                    </h4>
-                    <p className="text-lg font-semibold text-foreground">
-                      {typeof value === "object" ? JSON.stringify(value) : String(value)}
-                    </p>
-                  </motion.div>
-                ))}
-              </motion.div>
-            )}
+            <motion.div
+              variants={staggerContainer}
+              initial="hidden"
+              animate="visible"
+              className="grid grid-cols-1 md:grid-cols-2 gap-6"
+            >
+              {Object.entries(urun.teknik_ozellikler || {}).map(([key, value]) => (
+                <motion.div key={key} variants={staggerChild} className="p-6 bg-card rounded-lg border border-card-border">
+                  <h4 className="text-sm font-semibold text-foreground-secondary uppercase mb-2">
+                    {key.replace(/_/g, " ")}
+                  </h4>
+                  <p className="text-lg font-semibold text-foreground">
+                    {typeof value === "object" ? JSON.stringify(value) : String(value)}
+                  </p>
+                </motion.div>
+              ))}
+            </motion.div>
           </motion.div>
         </Container>
       </div>

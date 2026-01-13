@@ -31,7 +31,7 @@ export function Products() {
   }, []);
 
   return (
-    <section id="products" className="py-24 md:py-32">
+    <section id="products" className="py-20 md:py-28 lg:py-32">
       <Container>
         {/* Section Header */}
         <motion.div
@@ -39,19 +39,18 @@ export function Products() {
           initial="hidden"
           whileInView="visible"
           viewport={defaultViewport}
-          className="text-center max-w-3xl mx-auto mb-16 md:mb-20"
+          className="text-center max-w-2xl mx-auto mb-14 md:mb-16"
         >
-          <span className="text-red-500 font-semibold text-sm uppercase tracking-wider mb-4 block">
+          <span className="text-red-500 font-semibold text-xs uppercase tracking-widest mb-3 block">
             Ürünler
           </span>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-6">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-4 md:mb-5">
             <span className="text-foreground">Her İhtiyaca Uygun</span>
             <br />
             <span className="text-gradient">Güvenlik Çözümleri</span>
           </h2>
-          <p className="text-lg text-foreground-secondary leading-relaxed">
-            İç mekan kameralarından profesyonel PTZ sistemlere kadar, eviniz 
-            veya işletmeniz için mükemmel güvenlik çözümünü bulun.
+          <p className="text-base md:text-lg text-foreground-secondary leading-relaxed">
+            İç mekan kameralarından profesyonel PTZ sistemlere kadar, eviniz veya işletmeniz için mükemmel çözümü bulun.
           </p>
         </motion.div>
 
@@ -61,7 +60,7 @@ export function Products() {
           initial="hidden"
           whileInView="visible"
           viewport={defaultViewport}
-          className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
+          className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 mb-12 md:mb-14"
         >
           {urunler.map((urun) => (
             <ProductCard
@@ -69,12 +68,12 @@ export function Products() {
               product={{
                 id: urun.slug,
                 name: urun.ad,
-                description: urun.özellikleri?.[0] || urun.aciklama || '',
+                description: urun.ozellikleri?.[0] || urun.aciklama || '',
                 price: urun.fiyat,
                 category: urun.kategoriler?.[0] || '',
-                features: urun.özellikleri || [],
+                features: urun.ozellikleri || [],
                 image: urun.gorsel,
-                badge: urun.stok_durumu === 'stokta' ? 'Stokta' : null,
+                badge: urun.stok_durumu === 'stokta' ? 'STOKTA' : null,
               }}
             />
           ))}
@@ -86,14 +85,12 @@ export function Products() {
           initial="hidden"
           whileInView="visible"
           viewport={defaultViewport}
-          className="text-center mt-12"
+          className="text-center"
         >
-          <Button variant="outline" size="lg" asChild>
-            <a href="/urunler">
-              Tüm Ürünleri Görüntüle
-              <Icon name="arrow-right" size={20} />
-            </a>
-          </Button>
+          <a href="/urunler" className="inline-flex items-center gap-2 px-6 py-2.5 text-sm font-medium text-foreground hover:text-red-500 transition-colors group border border-border/40 rounded-lg hover:border-red-500/30 hover:bg-red-500/5">
+            Tüm Ürünleri Görüntüle
+            <Icon name="arrow-right" size={16} className="group-hover:translate-x-1 transition-transform" />
+          </a>
         </motion.div>
       </Container>
     </section>
@@ -118,97 +115,88 @@ interface ProductCardProps {
 }
 
 import Image from 'next/image';
+import Link from 'next/link';
+import { formatSlug } from '@/lib/utils';
 
 function ProductCard({ product }: ProductCardProps) {
   return (
     <motion.div variants={staggerChild}>
-      <Card
-        className="h-full group overflow-hidden"
-        padding="none"
-        hover={true}
-      >
-        {/* Image Container */}
-        <div className="relative aspect-[4/3] bg-background-secondary overflow-hidden">
-          {/* Product Image */}
-          {product.image ? (
-            <Image
-              src={product.image}
-              alt={product.name}
-              fill
-              className="object-contain object-center transition-transform duration-300 group-hover:scale-105"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              priority={true}
-            />
-          ) : (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-32 h-32 rounded-full bg-gradient-to-br from-neutral-200 to-neutral-300 dark:from-neutral-700 dark:to-neutral-800 flex items-center justify-center">
-                <Icon name="camera" size={48} className="text-foreground-muted" />
+      <Link href={`/urunler/detail/${product.id}`} className="block h-full">
+        <div className="group h-full rounded-xl overflow-hidden bg-card border border-border/50 hover:border-border/80 transition-all duration-300 hover:shadow-sm flex flex-col">
+          {/* Image Container */}
+          <div className="relative aspect-[5/4] bg-background-secondary/40 overflow-hidden flex-shrink-0">
+            {/* Product Image */}
+            {product.image ? (
+              <Image
+                src={product.image}
+                alt={product.name}
+                fill
+                className="object-contain object-center p-4 transition-transform duration-300 group-hover:scale-105"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                priority={true}
+              />
+            ) : (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <Icon name="camera" size={40} className="text-foreground-muted/20" />
               </div>
-            </div>
-          )}
-
-          {/* Hover Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-6">
-            <Button size="sm">
-              Detaylı İncele
-            </Button>
-          </div>
-
-          {/* Badge */}
-          {product.badge && (
-            <div className="absolute top-4 left-4">
-              <Badge 
-                variant={product.badge === 'New' ? 'primary' : product.badge === 'Best Seller' ? 'success' : 'secondary'}
-                size="sm"
-              >
-                {product.badge}
-              </Badge>
-            </div>
-          )}
-
-          {/* Category Tag */}
-          <div className="absolute top-4 right-4">
-            <span className="px-3 py-1 rounded-full text-xs font-medium bg-background/80 backdrop-blur-sm text-foreground-secondary">
-              {product.category}
-            </span>
-          </div>
-        </div>
-
-        {/* Content */}
-        <div className="p-6">
-          {/* Name & Price */}
-          <div className="flex items-start justify-between gap-4 mb-2">
-            <h3 className="text-lg font-semibold text-foreground group-hover:text-red-500 transition-colors">
-              {product.name}
-            </h3>
-            <span className="text-lg font-bold text-foreground">
-              {product.price} ₺
-            </span>
-          </div>
-
-          {/* Description */}
-          <p className="text-sm text-foreground-secondary mb-4">
-            {product.description}
-          </p>
-
-          {/* Features */}
-          <div className="flex flex-wrap gap-2">
-            {product.features.slice(0, 3).map((feature) => (
-              <span
-                key={feature}
-                className="px-2 py-1 rounded-md text-xs bg-foreground/5 text-foreground-muted"
-              >
-                {feature}
-              </span>
-            ))}
-            {product.features.length > 3 && (
-              <span className="px-2 py-1 rounded-md text-xs bg-foreground/5 text-foreground-muted">
-                +{product.features.length - 3} daha
-              </span>
             )}
           </div>
+
+          {/* Content */}
+          <div className="p-4 flex flex-col flex-grow">
+            {/* Category & Badge */}
+            <div className="flex items-center justify-between gap-2 mb-2">
+              <span className="text-[10px] font-semibold uppercase tracking-widest text-foreground-muted">
+                {formatSlug(product.category)}
+              </span>
+              {product.badge && (
+                <span className="text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-md bg-red-500 text-white">
+                  {product.badge}
+                </span>
+              )}
+            </div>
+
+            {/* Name */}
+            <h3 className="text-lg font-semibold text-foreground line-clamp-2 mb-2 group-hover:text-foreground transition-colors duration-300 leading-snug">
+              {product.name}
+            </h3>
+
+            {/* Features - Minimal */}
+            {product.features.length > 0 && (
+              <div className="flex flex-wrap gap-1.5 mb-3 flex-grow">
+                {product.features.slice(0, 2).map((feature) => (
+                  <span
+                    key={feature}
+                    className="text-[11px] px-2 py-0.5 rounded bg-foreground/5 text-foreground-muted leading-none"
+                  >
+                    {feature}
+                  </span>
+                ))}
+                {product.features.length > 2 && (
+                  <span className="text-[10px] px-2 py-0.5 rounded bg-foreground/5 text-foreground-muted leading-none">
+                    +{product.features.length - 2}
+                  </span>
+                )}
+              </div>
+            )}
+
+            {/* Price & CTA */}
+            <div className="border-t border-border/30 pt-3 mt-auto">
+              <div className="flex items-center justify-between">
+                <span className="font-semibold text-red-500 text-lg">
+                  {product.price} ₺
+                </span>
+                <div className="flex items-center gap-1.5 text-foreground-secondary group-hover:text-foreground transition-colors duration-300">
+                  <span className="text-[12px] font-medium uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+                    Gözat
+                  </span>
+                  <Icon name="arrow-right" size={14} className="flex-shrink-0 transition-transform duration-300 group-hover:translate-x-0.5" />
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </Card>
+      </Link>
     </motion.div>
   );
 }

@@ -33,8 +33,8 @@ export function Hero() {
   const monitorRotateX = useSpring(rawRotateX, { stiffness: 150, damping: 20, mass: 0.85 });
   const { resolvedTheme, mounted } = useTheme();
   const monitorFrameSrc = mounted && resolvedTheme === 'dark'
-    ? '/hero/monitor-optinumguvenlik-dark.png'
-    : '/hero/monitor-optinumguvenlik.png';
+    ? '/hero/monitor-mattech-dark.png'
+    : '/hero/monitor-mattech.png';
 
   return (
     <section className="relative min-h-screen overflow-hidden bg-gradient-to-b from-background via-background to-background">

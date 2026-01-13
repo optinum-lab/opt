@@ -22,7 +22,7 @@ export function Footer() {
     <footer className="bg-background-secondary border-t border-card-border">
       {/* Main Footer Content */}
       <Container className="py-16 md:py-20">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-12">
           {/* Brand Column */}
           <div className="lg:col-span-2">
             <Logo className="mb-6" />
@@ -74,16 +74,29 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Hizmetler Links */}
+          {/* Kategoriler Links */}
           <div>
-            <h3 className="font-semibold text-foreground mb-4">Hizmetlerimiz</h3>
+            <h3 className="font-semibold text-foreground mb-4">Kategoriler</h3>
             <ul className="space-y-3">
-              <li><FooterLink href="#">CCTV Kamera Kurulumu</FooterLink></li>
-              <li><FooterLink href="#">Güvenlik Sistemi Tasarımı</FooterLink></li>
-              <li><FooterLink href="#">Bakım ve Teknik Destek</FooterLink></li>
-              <li><FooterLink href="#">Sistem Yükseltme</FooterLink></li>
-              <li><FooterLink href="#">IP Kamera Sistemleri</FooterLink></li>
-              <li><FooterLink href="#">Kablosuz Güvenlik</FooterLink></li>
+              <li><FooterLink href="/urunler/kategori/kayit-cihazi">Kayıt Cihazı</FooterLink></li>
+              <li><FooterLink href="/urunler/kategori/kamera">Kamera</FooterLink></li>
+              <li><FooterLink href="/urunler/kategori/alarm-sistemi">Alarm Sistemi</FooterLink></li>
+              <li><FooterLink href="/urunler/kategori/access-kontrol">Access Kontrol</FooterLink></li>
+              <li><FooterLink href="/urunler/kategori/ekipmanlar">Ekipmanlar</FooterLink></li>
+              <li><FooterLink href="/urunler">Tüm Ürünler</FooterLink></li>
+            </ul>
+          </div>
+
+          {/* Yasal Links */}
+          <div>
+            <h3 className="font-semibold text-foreground mb-4">Yasal</h3>
+            <ul className="space-y-3">
+              <li><FooterLink href="/yasal/kvkk">KVKK</FooterLink></li>
+              <li><FooterLink href="/yasal/gizlilik-politikasi">Gizlilik Politikası</FooterLink></li>
+              <li><FooterLink href="/yasal/cerez-politikasi">Çerez Politikası</FooterLink></li>
+              <li><FooterLink href="/yasal/hizmet-sartlari">Hizmet Şartları</FooterLink></li>
+              <li><FooterLink href="/yasal/mesafeli-satis">Mesafeli Satış Sözleşmesi</FooterLink></li>
+              <li><FooterLink href="/yasal/iptal-iade">İptal ve İade</FooterLink></li>
             </ul>
           </div>
 
@@ -135,9 +148,11 @@ export function Footer() {
             </p>
 
             {/* Legal Links */}
-            <div className="flex items-center gap-6">
-              <FooterLink href="#" className="text-xs">Şartlar & Koşullar</FooterLink>
-              <FooterLink href="#" className="text-xs">Gizlilik Politikası</FooterLink>
+            <div className="flex items-center gap-6 flex-wrap justify-center md:justify-end">
+              <FooterLink href="/yasal/kvkk" className="text-xs">KVKK</FooterLink>
+              <FooterLink href="/yasal/gizlilik-politikasi" className="text-xs">Gizlilik Politikası</FooterLink>
+              <FooterLink href="/yasal/cerez-politikasi" className="text-xs">Çerez Politikası</FooterLink>
+              <FooterLink href="/yasal/hizmet-sartlari" className="text-xs">Hizmet Şartları</FooterLink>
             </div>
           </div>
         </Container>

@@ -35,7 +35,7 @@ export function WhyChooseUs() {
             Neden Biz
           </span>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-6">
-            <span className="text-gradient">Optinum Güvenlik</span>{' '}
+            <span className="text-gradient">Mat Tech</span>{' '}
             <span className="text-foreground">Farkı</span>
           </h2>
           <p className="text-lg text-foreground-secondary leading-relaxed">
@@ -59,7 +59,7 @@ export function WhyChooseUs() {
                 <span className="text-sm font-medium text-foreground-muted">Özellik</span>
               </div>
               <div className="p-4 md:p-6 text-center border-l border-card-border">
-                <span className="text-sm font-bold text-gradient">Optinum</span>
+                <span className="text-sm font-bold text-gradient">Mat Tech</span>
               </div>
               <div className="p-4 md:p-6 text-center border-l border-card-border">
                 <span className="text-sm font-medium text-foreground-muted">Diğerleri</span>

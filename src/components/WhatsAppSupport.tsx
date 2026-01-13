@@ -10,7 +10,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { siteConfig } from '@/lib/constants';
 
 const whatsappNumber = '905454506587';
-const pageUrl = typeof window !== 'undefined' ? window.location.href : 'https://optinumguvenlik.com';
+const pageUrl = typeof window !== 'undefined' ? window.location.href : 'https://www.mattech.com.tr';
 
 const supportOptions = [
   {

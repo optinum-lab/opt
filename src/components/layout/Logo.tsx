@@ -37,12 +37,12 @@ export function Logo({ className, showText = true }: LogoProps) {
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:rounded-lg',
         className
       )}
-      aria-label="Optinum Güvenlik - Ana Sayfa"
+      aria-label="Mat Tech - Ana Sayfa"
     >
       {/* Logo Image */}
       <Image
         src={logoSrc}
-        alt="Optinum Güvenlik Logo"
+        alt="Mat Tech Logo"
         width={showText ? 180 : 40}
         height={40}
         className="h-10 w-auto object-contain"
