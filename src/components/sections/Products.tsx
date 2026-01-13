@@ -121,7 +121,7 @@ import { formatSlug } from '@/lib/utils';
 function ProductCard({ product }: ProductCardProps) {
   return (
     <motion.div variants={staggerChild}>
-      <Link href={`/urunler/detail/${product.id}`} className="block h-full">
+      <Link href={`/urunler/${product.id}`} className="block h-full">
         <div className="group h-full rounded-xl overflow-hidden bg-card border border-border/50 hover:border-border/80 transition-all duration-300 hover:shadow-sm flex flex-col">
           {/* Image Container */}
           <div className="relative aspect-[5/4] bg-background-secondary/40 overflow-hidden flex-shrink-0">

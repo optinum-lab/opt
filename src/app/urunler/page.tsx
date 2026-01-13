@@ -7,8 +7,17 @@ import { UrunListesi } from "@/components/sections";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Ürünler | OptinumGuvenlik - Profesyonel Güvenlik Çözümleri",
-  description: "Dahua profesyonel güvenlik kamerası, NVR, alarm, access kontrol ve ekipmanları. Türkiye'de güvenilir güvenlik çözümleri.",
+  title: "Güvenlik Ürünleri | Kamera, Alarm, Bariyer, Turnike Sistemleri",
+  description: "Dahua ve Hikvision güvenlik kamerası, yangın alarm sistemi, hırsız alarmı, bariyer, turnike ve geçiş kontrol ürünleri. İstanbul'da ücretsiz keşif ve profesyonel kurulum.",
+  alternates: {
+    canonical: 'https://www.mattech.com.tr/urunler',
+  },
+  openGraph: {
+    title: 'Güvenlik Ürünleri Kataloğu | Mat Tech',
+    description: 'Profesyonel güvenlik sistemleri: Kamera, alarm, bariyer, turnike. Dahua & Hikvision yetkili bayi.',
+    url: 'https://www.mattech.com.tr/urunler',
+    type: 'website',
+  },
 };
 
 export default function UrunlerPage() {

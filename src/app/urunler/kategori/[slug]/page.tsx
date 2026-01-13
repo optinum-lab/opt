@@ -14,21 +14,21 @@ interface KategoriPageProps {
   }>;
 }
 
-// Türkçe kategori adları
+// Türkçe kategori adları - SEO optimize
 const KATEGORI_ISIMLERI: Record<string, string> = {
-  "kayit-cihazi": "Kayıt Cihazları",
-  "kamera": "IP Kameralar",
-  "alarm-sistemi": "Alarm Sistemleri",
-  "access-kontrol": "Access Kontrol Sistemleri",
-  "ekipmanlar": "Ekipmanlar ve Aksesuarlar",
+  "kayit-cihazi": "DVR ve NVR Kayıt Cihazları",
+  "kamera": "Güvenlik Kameraları",
+  "alarm-sistemi": "Yangın ve Hırsız Alarm Sistemleri",
+  "access-kontrol": "Geçiş Kontrol ve Turnike Sistemleri",
+  "ekipmanlar": "Bariyer ve Güvenlik Ekipmanları",
 };
 
 const KATEGORI_ACIKLAMALARI: Record<string, string> = {
-  "kayit-cihazi": "Güvenlik kamera sistemleriniz için profesyonel NVR, XVR ve mobil kayıt cihazları",
-  "kamera": "4K Ultra HD, termal ve PTZ özellikleriyle akıllı IP kameralar",
-  "alarm-sistemi": "24/7 koruma için entegre alarm panelleri ve dedektörleri",
-  "access-kontrol": "Biyometrik parmak izi, yüz tanıma ve kart sistemi çözümleri",
-  "ekipmanlar": "Ağ anahtarları, monitörler, kablolar ve diğer ekipmanlar",
+  "kayit-cihazi": "Dahua ve Hikvision DVR, NVR, XVR kayıt cihazları. 4K destekli, uzaktan erişimli profesyonel video kayıt çözümleri.",
+  "kamera": "IP kamera, dome kamera, bullet kamera, PTZ kamera. 4K çözünürlük, gece görüşü, yapay zeka destekli güvenlik kameraları.",
+  "alarm-sistemi": "Yangın alarm paneli, duman dedektörü, hırsız alarm sistemi, hareket sensörü. Ev ve işyeri için 7/24 koruma.",
+  "access-kontrol": "Turnike, kartlı geçiş, parmak izi okuyucu, yüz tanıma sistemi, PDKS. Profesyonel geçiş kontrol çözümleri.",
+  "ekipmanlar": "Otopark bariyeri, mantar bariyer, ağ switch, PoE adaptör, kamera montaj aksesuarları ve kablolar.",
 };
 
 export async function generateMetadata({
@@ -36,6 +36,7 @@ export async function generateMetadata({
 }: KategoriPageProps): Promise<Metadata> {
   const { slug } = await params;
   const ad = KATEGORI_ISIMLERI[slug];
+  const aciklama = KATEGORI_ACIKLAMALARI[slug];
 
   if (!ad) {
     return {
@@ -44,8 +45,17 @@ export async function generateMetadata({
   }
 
   return {
-    title: `${ad} | OptinumGuvenlik - Profesyonel Güvenlik Çözümleri`,
-    description: KATEGORI_ACIKLAMALARI[slug],
+    title: `${ad} | Mat Tech Güvenlik Sistemleri İstanbul`,
+    description: `${aciklama} Mat Tech - Dahua & Hikvision yetkili bayi. İstanbul'da ücretsiz keşif ve profesyonel kurulum.`,
+    alternates: {
+      canonical: `https://www.mattech.com.tr/urunler/kategori/${slug}`,
+    },
+    openGraph: {
+      title: `${ad} | Mat Tech`,
+      description: aciklama,
+      url: `https://www.mattech.com.tr/urunler/kategori/${slug}`,
+      type: 'website',
+    },
   };
 }
 

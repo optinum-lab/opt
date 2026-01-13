@@ -111,7 +111,7 @@ export default function KVKKPage() {
               <h2 className="text-2xl font-semibold text-foreground mb-4">8. Başvuru Yöntemi</h2>
               <p className="text-foreground-secondary leading-relaxed">
                 Yukarıda belirtilen haklarınızı kullanmak için, kimliğinizi tespit edici gerekli 
-                bilgiler ile birlikte info@optinumguvenlik.com adresine e-posta veya Perpa Ticaret 
+                bilgiler ile birlikte info@mattech.com.tr adresine e-posta veya Perpa Ticaret 
                 Merkezi, A Blok Kat:9 No:1288, Şişli/İstanbul adresine yazılı olarak başvurabilirsiniz. 
                 Başvurularınız, KVKK'nın 13. maddesi uyarınca en geç 30 gün içinde sonuçlandırılacaktır.
               </p>
@@ -121,7 +121,7 @@ export default function KVKKPage() {
               <h2 className="text-2xl font-semibold text-foreground mb-4">9. İletişim</h2>
               <div className="text-foreground-secondary leading-relaxed space-y-2">
                 <p><strong className="text-foreground">Adres:</strong> Perpa Ticaret Merkezi, A Blok Kat:9 No:1288, Şişli/İstanbul</p>
-                <p><strong className="text-foreground">E-posta:</strong> info@optinumguvenlik.com</p>
+                <p><strong className="text-foreground">E-posta:</strong> info@mattech.com.tr</p>
                 <p><strong className="text-foreground">Telefon:</strong> +90 545 450 65 87</p>
               </div>
             </section>

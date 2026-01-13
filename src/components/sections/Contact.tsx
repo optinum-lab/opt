@@ -162,13 +162,14 @@ export function Contact() {
               className="rounded-2xl overflow-hidden border border-white/5 h-48"
             >
               <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d24065.593213340973!2d28.894822392802897!3d41.06463924605643!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14cabb4f35939dd9%3A0xc29724ded90e277f!2sOptinum%20G%C3%BCvenlik!5e0!3m2!1str!2str!4v1757619643628!5m2!1str!2str" 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3009.1234!2d28.9847!3d41.0603!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sPerpa%20Ticaret%20Merkezi!5e0!3m2!1str!2str!4v1705000000000!5m2!1str!2str" 
                 width="100%" 
                 height="100%" 
                 style={{ border: 0 }} 
                 allowFullScreen 
                 loading="lazy" 
                 referrerPolicy="no-referrer-when-downgrade"
+                title="Mat Tech Güvenlik Sistemleri - Perpa Ticaret Merkezi Konum"
                 className="grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition-all duration-500"
               />
             </motion.div>

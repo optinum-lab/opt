@@ -202,7 +202,7 @@ export function UrunListesi({ kategoriSlug, titleOverride }: UrunListesiProps) {
         >
           {siraliUrunler.map((urun) => (
             <motion.div key={urun.id} variants={staggerChild}>
-              <Link href={`/urunler/detail/${urun.slug}`}>
+              <Link href={`/urunler/${urun.slug}`}>
                 <div className="group h-full rounded-2xl overflow-hidden bg-card hover:shadow-xl transition-all duration-300 border border-card-border cursor-pointer">
                   {/* Görsel */}
                   <div className="relative w-full h-64 overflow-hidden bg-background">

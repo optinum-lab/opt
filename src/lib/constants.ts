@@ -9,9 +9,13 @@
 
 export const siteConfig = {
   name: 'Mat Tech',
-  description: 'Evler ve işletmeler için profesyonel CCTV güvenlik sistemleri. 10+ yıllık tecrübe, 5.000\'den fazla mutlu müşteri ve %99.9 kesintisiz hizmet garantisi.',
+  slogan: 'Güvenliğiniz Bizim İşimiz',
+  description: 'İstanbul Perpa\'da 10+ yıllık tecrübe ile güvenlik kamerası, yangın alarm sistemi, hırsız alarmı, bariyer, turnike ve geçiş kontrol sistemleri kurulumu. Dahua & Hikvision yetkili bayi.',
+  shortDescription: 'Profesyonel güvenlik sistemleri: Kamera, alarm, bariyer, turnike ve geçiş kontrol çözümleri.',
   url: 'https://www.mattech.com.tr',
   ogImage: '/og-image.png',
+  foundingYear: 2014,
+  employeeCount: '10-50',
   links: {
     twitter: 'https://twitter.com/mattech',
     linkedin: 'https://linkedin.com/company/mattech',
@@ -24,19 +28,124 @@ export const siteConfig = {
   contact: {
     email: 'info@mattech.com.tr',
     phone: '+90 545 450 65 87',
+    phoneFormatted: '0545 450 65 87',
     address: 'Perpa Ticaret Merkezi, A Blok Kat:9 No:1288, Şişli/İstanbul',
+    addressStreet: 'Perpa Ticaret Merkezi, A Blok Kat:9 No:1288',
+    addressLocality: 'Şişli',
+    addressRegion: 'İstanbul',
+    addressCountry: 'TR',
+    postalCode: '34384',
     mapUrl: 'https://maps.app.goo.gl/MDr3VLmZyjXjFTvy8',
     workingHours: '7/24 Destek',
+    coordinates: {
+      latitude: 41.0603,
+      longitude: 28.9847,
+    },
   },
+  // SEO için hizmet alanları
+  serviceAreas: [
+    'İstanbul',
+    'Şişli',
+    'Mecidiyeköy',
+    'Beyoğlu',
+    'Beşiktaş',
+    'Kağıthane',
+    'Eyüpsultan',
+    'Sarıyer',
+    'Bakırköy',
+    'Ataşehir',
+    'Kadıköy',
+    'Ümraniye',
+    'Maltepe',
+  ],
 };
+
+// ============================================
+// Hizmetler (SEO ve Schema için)
+// ============================================
+
+export const services = [
+  {
+    id: 'guvenlik-kamerasi',
+    name: 'Güvenlik Kamerası Sistemleri',
+    shortName: 'Güvenlik Kamerası',
+    description: 'Profesyonel CCTV ve IP kamera sistemleri kurulumu. Dahua ve Hikvision yetkili bayisi olarak ev, işyeri, fabrika ve site güvenliği için 4K, gece görüşlü, PTZ kamera çözümleri sunuyoruz.',
+    icon: 'camera',
+    keywords: ['güvenlik kamerası', 'CCTV', 'IP kamera', 'dome kamera', 'bullet kamera', 'PTZ kamera', 'gece görüşlü kamera'],
+    features: ['4K Ultra HD Çözünürlük', 'Gece Görüşü', 'Uzaktan İzleme', 'Hareket Algılama', 'Yapay Zeka Destekli'],
+  },
+  {
+    id: 'yangin-alarm',
+    name: 'Yangın Alarm Sistemleri',
+    shortName: 'Yangın Alarmı',
+    description: 'Konvansiyonel ve adresli yangın algılama sistemleri. Duman dedektörü, ısı dedektörü, yangın ihbar butonu ve alarm paneli kurulumu ile işyerinizi yangına karşı koruyoruz.',
+    icon: 'flame',
+    keywords: ['yangın alarm sistemi', 'duman dedektörü', 'yangın algılama', 'yangın ihbar butonu', 'yangın paneli'],
+    features: ['7/24 İzleme', 'Otomatik İhbar', 'SMS Bildirimi', 'Entegre Sistem', 'Bakım Hizmeti'],
+  },
+  {
+    id: 'hirsiz-alarm',
+    name: 'Hırsız Alarm Sistemleri',
+    shortName: 'Hırsız Alarmı',
+    description: 'Ev ve işyeri için kablosuz ve kablolu hırsız alarm sistemleri. Hareket sensörü, kapı/pencere sensörü, siren ve alarm paneli ile 7/24 güvenlik.',
+    icon: 'shield',
+    keywords: ['hırsız alarm sistemi', 'ev alarmı', 'işyeri alarmı', 'hareket sensörü', 'alarm paneli', 'kablosuz alarm'],
+    features: ['Kablosuz Sensörler', 'Mobil Bildirim', 'Panik Butonu', 'Uzaktan Kontrol', 'Entegre İzleme'],
+  },
+  {
+    id: 'bariyer-sistemi',
+    name: 'Bariyer Sistemleri',
+    shortName: 'Bariyer',
+    description: 'Otopark ve site girişleri için otomatik bariyer sistemleri. Kollu bariyer, hızlı bariyer ve mantar bariyer çözümleri ile araç giriş kontrolü.',
+    icon: 'barrier',
+    keywords: ['bariyer sistemi', 'otopark bariyeri', 'otomatik bariyer', 'kollu bariyer', 'araç bariyeri'],
+    features: ['Otomatik Açılış', 'Uzaktan Kumanda', 'Araç Tanıma', 'Plaka Okuma Entegrasyonu', 'Dayanıklı Yapı'],
+  },
+  {
+    id: 'turnike-sistemi',
+    name: 'Turnike Sistemleri',
+    shortName: 'Turnike',
+    description: 'Personel ve ziyaretçi geçiş kontrolü için tripod ve tam boy turnike sistemleri. Kartlı, parmak izli ve yüz tanımalı geçiş seçenekleri.',
+    icon: 'turnstile',
+    keywords: ['turnike sistemi', 'tripod turnike', 'tam boy turnike', 'geçiş kontrol turnike'],
+    features: ['Hızlı Geçiş', 'Anti-Tailgate', 'Kartlı Geçiş', 'Biyometrik Entegrasyon', 'Acil Durum Açılışı'],
+  },
+  {
+    id: 'gecis-kontrol',
+    name: 'Geçiş Kontrol Sistemleri',
+    shortName: 'Access Kontrol',
+    description: 'Kartlı geçiş, parmak izi okuyucu ve yüz tanıma sistemleri ile bina ve oda bazlı erişim kontrolü. PDKS entegrasyonu ile personel takibi.',
+    icon: 'fingerprint',
+    keywords: ['geçiş kontrol sistemi', 'access kontrol', 'kartlı geçiş', 'parmak izi okuyucu', 'yüz tanıma sistemi', 'PDKS'],
+    features: ['Biyometrik Doğrulama', 'Kartlı Geçiş', 'Zaman Yönetimi', 'Raporlama', 'PDKS Entegrasyonu'],
+  },
+  {
+    id: 'interkom',
+    name: 'İnterkom ve Kapı Telefonu',
+    shortName: 'İnterkom',
+    description: 'Villa, apartman ve işyeri için görüntülü interkom ve kapı telefonu sistemleri. Dahua ve Hikvision interkom çözümleri.',
+    icon: 'phone',
+    keywords: ['görüntülü interkom', 'kapı telefonu', 'daire telefonu', 'villa interkom', 'apartman interkom'],
+    features: ['HD Görüntü', 'Gece Görüşü', 'Uzaktan Açma', 'Mobil Uygulama', 'Çoklu Daire Desteği'],
+  },
+  {
+    id: 'gsm-sinyal-guclendirici',
+    name: 'GSM Sinyal Güçlendirici',
+    shortName: 'Sinyal Güçlendirici',
+    description: 'Bina içi zayıf GSM sinyalini güçlendiren profesyonel repeater sistemleri. Ofis, fabrika, AVM ve bodrum katlarda kesintisiz cep telefonu çekimi. 4G/5G LTE desteği.',
+    icon: 'signal',
+    keywords: ['GSM sinyal güçlendirici', 'cep telefonu sinyal güçlendirici', 'GSM repeater', 'mobil sinyal amplifikatörü', '4G sinyal güçlendirici', '5G sinyal güçlendirici'],
+    features: ['4G/5G LTE Desteği', 'Geniş Kapsama Alanı', 'Kolay Kurulum', 'Tüm Operatörler', 'Yasal ve Lisanslı'],
+  },
+];
 
 // ============================================
 // Navigation Links
 // ============================================
 
 export const navLinks = [
-  { href: '#features', label: 'Özellikler' },
-  { href: '/urunler', label: 'Ürünler Kataloğu' },
+  { href: '#features', label: 'Hizmetlerimiz' },
+  { href: '/urunler', label: 'Ürünler' },
   { href: '#how-it-works', label: 'Nasıl Çalışır' },
   { href: '#testimonials', label: 'Referanslar' },
   { href: '#contact', label: 'İletişim' },

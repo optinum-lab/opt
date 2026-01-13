@@ -2,10 +2,14 @@ import { MetadataRoute } from 'next';
 import fs from 'fs';
 import path from 'path';
 
+/**
+ * Sitemap Generator
+ * SEO için optimize edilmiş sitemap - tüm güvenlik hizmetleri dahil
+ */
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://www.mattech.com.tr';
   
-  // Ana sayfalar
+  // Ana sayfalar - Yüksek öncelikli
   const routes = [
     {
       url: baseUrl,
@@ -21,23 +25,23 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
-  // Kategori sayfaları
+  // Hizmet/Kategori sayfaları - SEO için önemli
   const categories = [
-    'kayit-cihazi',
-    'kamera',
-    'alarm-sistemi',
-    'access-kontrol',
-    'ekipmanlar',
+    { slug: 'kamera', priority: 0.9 },           // Güvenlik kamerası - ana hizmet
+    { slug: 'alarm-sistemi', priority: 0.9 },    // Yangın/Hırsız alarm - ana hizmet
+    { slug: 'access-kontrol', priority: 0.85 },  // Geçiş kontrol/turnike
+    { slug: 'kayit-cihazi', priority: 0.85 },    // DVR/NVR
+    { slug: 'ekipmanlar', priority: 0.8 },       // Bariyer ve ekipmanlar
   ];
 
-  const categoryPages = categories.map((category) => ({
-    url: `${baseUrl}/urunler/kategori/${category}`,
+  const categoryPages = categories.map((cat) => ({
+    url: `${baseUrl}/urunler/kategori/${cat.slug}`,
     lastModified: new Date(),
     changeFrequency: 'weekly' as const,
-    priority: 0.8,
+    priority: cat.priority,
   }));
 
-  // Ürün detay sayfaları - JSON dosyasını runtime'da oku
+  // Ürün detay sayfaları - JSON dosyasından oku
   let productPages: MetadataRoute.Sitemap = [];
   try {
     const filePath = path.join(process.cwd(), 'public', 'data', 'products.json');
@@ -45,7 +49,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     const productsData = JSON.parse(fileContents);
     
     productPages = productsData.urunler.map((product: any) => ({
-      url: `${baseUrl}/urunler/detail/${product.slug}`,
+      url: `${baseUrl}/urunler/${product.slug}`,
       lastModified: new Date(),
       changeFrequency: 'weekly' as const,
       priority: 0.7,
@@ -54,7 +58,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     console.error('Products JSON okuma hatası:', error);
   }
 
-  // Yasal sayfalar
+  // Yasal sayfalar - Düşük öncelik ama gerekli
   const legalPages = [
     'kvkk',
     'gizlilik-politikasi',

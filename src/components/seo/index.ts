@@ -6,3 +6,5 @@
 export { OrganizationSchema } from './OrganizationSchema';
 export { WebsiteSchema } from './WebsiteSchema';
 export { BreadcrumbSchema } from './BreadcrumbSchema';
+export { LocalBusinessSchema } from './LocalBusinessSchema';
+export { ServiceSchema, FAQSchema } from './ServiceSchema';

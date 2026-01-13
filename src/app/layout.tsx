@@ -10,7 +10,7 @@ import { ThemeProvider } from '@/components/layout/ThemeProvider';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { WhatsAppSupport } from '@/components/WhatsAppSupport';
-import { OrganizationSchema, WebsiteSchema } from '@/components/seo';
+import { OrganizationSchema, WebsiteSchema, LocalBusinessSchema, ServiceSchema, FAQSchema } from '@/components/seo';
 import { GoogleAnalytics, GoogleTagManager } from '@/components/analytics';
 
 // ============================================
@@ -30,34 +30,115 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.mattech.com.tr'),
   title: {
-    default: 'Mat Tech | Profesyonel Güvenlik Kamera Sistemleri ve CCTV Çözümleri',
-    template: '%s | Mat Tech',
+    default: 'Mat Tech | Güvenlik Kamera, Yangın Alarm, Bariyer ve Geçiş Kontrol Sistemleri İstanbul',
+    template: '%s | Mat Tech Güvenlik Sistemleri',
   },
   description:
-    'Dahua ve Hikvision markaları ile profesyonel güvenlik kamera sistemleri. Ev ve işyeri için IP kamera, DVR, NVR kurulum ve teknik destek hizmetleri. ✓ 7/24 Destek ✓ Ücretsiz Keşif',
+    'İstanbul Perpa\'da 10+ yıllık tecrübe ile güvenlik kamerası, yangın alarm sistemi, hırsız alarmı, bariyer, turnike ve geçiş kontrol sistemleri kurulumu. Dahua & Hikvision yetkili bayi. ✓ Ücretsiz Keşif ✓ 7/24 Teknik Destek ✓ Profesyonel Montaj',
   keywords: [
+    // Marka
+    'Mat Tech',
+    'Mat Tech güvenlik',
+    'mattech güvenlik sistemleri',
+    // Güvenlik Kameraları
     'güvenlik kamerası',
-    'CCTV',
-    'IP kamera',
+    'güvenlik kamerası fiyatları',
     'güvenlik kamera sistemleri',
-    'Dahua kamera',
-    'Hikvision kamera',
-    'DVR',
-    'NVR',
-    'kamera kurulumu',
-    'güvenlik sistemleri',
-    'kayıt cihazı',
-    'alarm sistemi',
-    'access kontrol',
-    'güvenlik ekipmanları',
-    'ev güvenlik kamerası',
-    'işyeri güvenlik kamerası',
+    'CCTV kamera',
+    'IP kamera',
+    'analog kamera',
+    'dome kamera',
+    'bullet kamera',
+    'PTZ kamera',
     'gece görüşlü kamera',
     'dış mekan kamera',
     'iç mekan kamera',
-    'kablosuz kamera',
+    '4K güvenlik kamerası',
+    'kablosuz güvenlik kamerası',
+    'wifi kamera',
+    // Markalar
+    'Dahua kamera',
+    'Dahua güvenlik sistemleri',
+    'Hikvision kamera',
+    'Hikvision güvenlik sistemleri',
+    // Kayıt Cihazları
+    'DVR kayıt cihazı',
+    'NVR kayıt cihazı',
+    'XVR kayıt cihazı',
+    'kamera kayıt cihazı',
+    // Yangın Alarm
+    'yangın alarm sistemi',
+    'yangın algılama sistemi',
+    'duman dedektörü',
+    'ısı dedektörü',
+    'yangın ihbar butonu',
+    'yangın alarm paneli',
+    'konvansiyonel yangın alarm',
+    'adresli yangın alarm',
+    // Hırsız Alarm
+    'hırsız alarm sistemi',
+    'alarm sistemi',
+    'kablosuz alarm',
+    'ev alarm sistemi',
+    'işyeri alarm sistemi',
+    'hareket sensörü',
+    'kapı sensörü',
+    'manyetik kontak',
+    'alarm paneli',
+    'alarm siren',
+    // Bariyer Sistemleri
+    'bariyer sistemi',
+    'otopark bariyeri',
+    'araç bariyeri',
+    'kollu bariyer',
+    'otomatik bariyer',
+    'bariyer fiyatları',
+    // Turnike Sistemleri
+    'turnike sistemi',
+    'tripod turnike',
+    'tam boy turnike',
+    'geçiş turnike',
+    'turnike fiyatları',
+    // Geçiş Kontrol (Access Control)
+    'geçiş kontrol sistemi',
+    'access kontrol',
+    'kartlı geçiş sistemi',
+    'parmak izi okuyucu',
+    'yüz tanıma sistemi',
+    'PDKS sistemi',
+    'personel takip sistemi',
+    // İnterkom
+    'görüntülü interkom',
+    'daire telefonu',
+    'kapı telefonu',
+    'villa interkom',
+    'apartman interkom',
+    // GSM Sinyal Güçlendirici
+    'GSM sinyal güçlendirici',
+    'cep telefonu sinyal güçlendirici',
+    'sinyal amplifikatörü',
+    'GSM repeater',
+    'mobil sinyal güçlendirici',
+    'bina içi sinyal güçlendirici',
+    'ofis sinyal güçlendirici',
+    '4G sinyal güçlendirici',
+    '5G sinyal güçlendirici',
+    'LTE sinyal güçlendirici',
+    'cep telefonu çekmiyor',
+    'sinyal yok çözümü',
+    // Konum bazlı
+    'İstanbul güvenlik kamerası',
+    'Perpa güvenlik sistemleri',
+    'Şişli güvenlik kamerası',
+    'Mecidiyeköy güvenlik sistemleri',
+    // Hizmet bazlı
+    'güvenlik kamerası kurulumu',
+    'kamera montajı',
+    'alarm kurulumu',
+    'güvenlik sistemi bakım',
+    'güvenlik danışmanlık',
   ],
-  authors: [{ name: 'Mat Tech' }],
+  authors: [{ name: 'Mat Tech Güvenlik Sistemleri' }],
   creator: 'Mat Tech',
   publisher: 'Mat Tech',
   alternates: {
@@ -67,25 +148,25 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'tr_TR',
     url: 'https://www.mattech.com.tr',
-    siteName: 'Mat Tech',
-    title: 'Mat Tech | Profesyonel Güvenlik Kamera Sistemleri',
+    siteName: 'Mat Tech Güvenlik Sistemleri',
+    title: 'Mat Tech | Güvenlik Kamera, Alarm, Bariyer Sistemleri İstanbul',
     description:
-      'Dahua ve Hikvision güvenlik kamera sistemleri. Ev ve işyeri için profesyonel CCTV kurulum ve teknik destek. ✓ 10+ Yıl Tecrübe ✓ 7/24 Hizmet',
+      'İstanbul\'da profesyonel güvenlik çözümleri: Kamera, yangın alarmı, hırsız alarmı, bariyer, turnike ve geçiş kontrol sistemleri. Dahua & Hikvision yetkili bayi. 10+ yıl tecrübe.',
     images: [
       {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'Mat Tech - Profesyonel Güvenlik Kamera Sistemleri',
+        alt: 'Mat Tech - Güvenlik Kamera ve Alarm Sistemleri İstanbul',
         type: 'image/png',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Mat Tech | Profesyonel Güvenlik Kamera Sistemleri',
+    title: 'Mat Tech | Güvenlik Sistemleri İstanbul',
     description:
-      'Dahua ve Hikvision güvenlik kamera sistemleri. Profesyonel kurulum ve 7/24 teknik destek.',
+      'Güvenlik kamerası, yangın alarmı, hırsız alarmı, bariyer ve turnike sistemleri. Profesyonel kurulum, 7/24 destek.',
     creator: '@mattech',
     images: ['/og-image.png'],
     site: '@mattech',
@@ -152,8 +233,13 @@ export default function RootLayout({
           <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM_ID} />
         )}
         
+        {/* SEO Structured Data - JSON-LD */}
         <OrganizationSchema />
         <WebsiteSchema />
+        <LocalBusinessSchema />
+        <ServiceSchema />
+        <FAQSchema />
+        
         {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
           <GoogleAnalytics measurementId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID} />
         )}

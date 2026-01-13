@@ -16,16 +16,16 @@ import {
 } from '@/components/sections';
 
 export const metadata: Metadata = {
-  title: 'Mat Tech | Profesyonel Güvenlik Kamera Sistemleri - Dahua & Hikvision',
+  title: 'Mat Tech | Güvenlik Kamerası, Yangın Alarm, Bariyer Sistemleri İstanbul',
   description:
-    'Türkiye\'nin güvenilir güvenlik kamerası tedarikçisi. Dahua ve Hikvision markaları ile IP kamera, DVR, NVR sistemleri. ✓ Ücretsiz Keşif ✓ Profesyonel Kurulum ✓ 7/24 Teknik Destek. Perpa Ticaret Merkezi - İstanbul',
+    'İstanbul Perpa\'da 10+ yıllık tecrübe ile güvenlik kamerası, yangın alarmı, hırsız alarmı, bariyer, turnike ve geçiş kontrol sistemleri. Dahua & Hikvision yetkili bayi. ✓ Ücretsiz Keşif ✓ 7/24 Destek ✓ Profesyonel Kurulum',
   alternates: {
     canonical: 'https://www.mattech.com.tr',
   },
   openGraph: {
-    title: 'Mat Tech | Profesyonel Güvenlik Kamera Sistemleri',
+    title: 'Mat Tech | Güvenlik Kamerası, Alarm ve Bariyer Sistemleri',
     description:
-      'Dahua ve Hikvision güvenlik kamera sistemleri. Profesyonel kurulum ve 7/24 destek. ✓ 10+ Yıl Tecrübe',
+      'İstanbul\'da profesyonel güvenlik sistemleri: Kamera, yangın alarmı, hırsız alarmı, bariyer, turnike. Dahua & Hikvision yetkili bayi.',
     url: 'https://www.mattech.com.tr',
     type: 'website',
   },

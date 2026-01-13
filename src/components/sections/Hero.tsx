@@ -174,7 +174,7 @@ export function Hero() {
                 <div className="relative z-30 pointer-events-none">
                   <Image
                     src={monitorFrameSrc}
-                    alt="Optinum Güvenlik Monitör"
+                    alt="Mat Tech Güvenlik Monitör"
                     width={1200}
                     height={800}
                     className="w-full h-auto"
