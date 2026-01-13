@@ -14,6 +14,20 @@ export const metadata: Metadata = {
   robots: 'noindex, nofollow',
 };
 
+interface Kampanya {
+  id: number;
+  baslik: string;
+  slug: string;
+  aciklama: string | null;
+  gorsel: string | null;
+  icon: string | null;
+  link: string | null;
+  sira: number;
+  aktif: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
 interface Props {
   params: Promise<{ id: string }>;
 }
@@ -22,11 +36,13 @@ export default async function KampanyaDuzenlePage({ params }: Props) {
   const { id } = await params;
   const supabase = await createClient();
   
-  const { data: kampanya, error } = await supabase
+  const { data, error } = await supabase
     .from('kampanyalar')
     .select('*')
     .eq('id', id)
     .single();
+
+  const kampanya = data as Kampanya | null;
 
   if (error || !kampanya) {
     notFound();

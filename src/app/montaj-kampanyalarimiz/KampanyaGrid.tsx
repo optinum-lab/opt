@@ -7,6 +7,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "motion/react";
 
 interface Kampanya {
@@ -73,7 +74,8 @@ function KampanyaKart({ kampanya, index }: { kampanya: Kampanya; index: number }
   
   const renk = kampanya.renk || "red";
   const palet = renkPaletleri[renk] || renkPaletleri.red;
-  const href = kampanya.link || `/urunler/kategori/${kampanya.slug}`;
+  // Detay sayfasına yönlendir
+  const href = `/montaj-kampanyalarimiz/${kampanya.slug}`;
 
   // Varsayılan özellikler
   const ozellikler = kampanya.ozellikler || [
@@ -103,25 +105,55 @@ function KampanyaKart({ kampanya, index }: { kampanya: Kampanya; index: number }
               : "shadow-lg shadow-black/5"
           }`}
         >
-          {/* Üst Gradient Bar */}
-          <div className={`h-1.5 bg-gradient-to-r ${palet.bg}`} />
-          
-          {/* Badge */}
-          {kampanya.badge && (
-            <div className={`absolute top-5 right-5 z-10 bg-gradient-to-r ${palet.bg} text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg`}>
-              {kampanya.badge}
+          {/* Kampanya Görseli */}
+          {kampanya.gorsel ? (
+            <div className="relative aspect-[16/10] overflow-hidden">
+              <Image
+                src={kampanya.gorsel}
+                alt={kampanya.baslik}
+                fill
+                className={`object-cover transition-transform duration-500 ${isHovered ? "scale-110" : "scale-100"}`}
+              />
+              {/* Gradient Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+              
+              {/* Badge - Görsel Üzerinde */}
+              {kampanya.badge && (
+                <div className={`absolute top-4 left-4 z-10 bg-gradient-to-r ${palet.bg} text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg`}>
+                  {kampanya.badge}
+                </div>
+              )}
+              
+              {/* Fiyat - Görsel Üzerinde */}
+              {kampanya.fiyat && (
+                <div className="absolute bottom-4 left-4 right-4">
+                  {kampanya.eski_fiyat && (
+                    <div className="text-white/70 line-through text-sm mb-1">
+                      {kampanya.eski_fiyat}
+                    </div>
+                  )}
+                  <div className="text-2xl md:text-3xl font-bold text-white">
+                    {kampanya.fiyat}
+                  </div>
+                </div>
+              )}
             </div>
+          ) : (
+            <>
+              {/* Üst Gradient Bar - Görsel yoksa */}
+              <div className={`h-1.5 bg-gradient-to-r ${palet.bg}`} />
+              
+              {/* Badge - Görsel yoksa */}
+              {kampanya.badge && (
+                <div className={`absolute top-5 right-5 z-10 bg-gradient-to-r ${palet.bg} text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg`}>
+                  {kampanya.badge}
+                </div>
+              )}
+            </>
           )}
 
           {/* İçerik */}
           <div className="p-6 md:p-8">
-            {/* Kamera İkonu */}
-            <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${palet.bg} flex items-center justify-center mb-6 transition-transform duration-300 ${isHovered ? "scale-110 rotate-3" : ""}`}>
-              <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z" />
-              </svg>
-            </div>
-
             {/* Başlık */}
             <h3 className="text-xl md:text-2xl font-bold text-neutral-900 dark:text-white mb-2">
               {kampanya.baslik}
@@ -132,8 +164,8 @@ function KampanyaKart({ kampanya, index }: { kampanya: Kampanya; index: number }
               {kampanya.aciklama}
             </p>
 
-            {/* Fiyat */}
-            {kampanya.fiyat && (
+            {/* Fiyat - Görsel yoksa burada göster */}
+            {!kampanya.gorsel && kampanya.fiyat && (
               <div className="mb-6">
                 {kampanya.eski_fiyat && (
                   <div className="text-neutral-400 line-through text-sm mb-1">

@@ -14,13 +14,29 @@ export const metadata: Metadata = {
   robots: 'noindex, nofollow',
 };
 
+interface Kampanya {
+  id: number;
+  baslik: string;
+  slug: string;
+  aciklama: string | null;
+  gorsel: string | null;
+  icon: string | null;
+  link: string | null;
+  sira: number;
+  aktif: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
 export default async function KampanyalarPage() {
   const supabase = await createClient();
   
-  const { data: kampanyalar, error } = await supabase
+  const { data, error } = await supabase
     .from('kampanyalar')
     .select('*')
     .order('sira', { ascending: true });
+
+  const kampanyalar = (data || []) as Kampanya[];
 
   return (
     <div className="space-y-6">

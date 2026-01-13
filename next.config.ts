@@ -17,6 +17,14 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "res.cloudinary.com",
       },
+      {
+        protocol: "https",
+        hostname: "static.ticimax.cloud",
+      },
+      {
+        protocol: "https",
+        hostname: "w0.peakpx.com",
+      },
     ],
   },
 };

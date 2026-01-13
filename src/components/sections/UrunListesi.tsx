@@ -11,8 +11,9 @@ import Image from "next/image";
 import { Container, Button, Icon, Badge } from "@/components/ui";
 import { 
   Urun, 
-  UrunVeritabani, 
-  urunVeritabaniYukle,
+  tumUrunleriGetir,
+  urunleriKategoriyeGoreGetir,
+  varsayilanKategoriler,
   stokRengiBul,
   fiyatiFormatla
 } from "@/lib/product-utils";
@@ -33,7 +34,6 @@ const KATEGORI_ICONS: Record<string, string> = {
 };
 
 export function UrunListesi({ kategoriSlug, titleOverride }: UrunListesiProps) {
-  const [veri, setVeri] = useState<UrunVeritabani | null>(null);
   const [urunler, setUrunler] = useState<Urun[]>([]);
   const [yukleniyor, setYukleniyor] = useState(true);
   const [hata, setHata] = useState<string | null>(null);
@@ -44,9 +44,10 @@ export function UrunListesi({ kategoriSlug, titleOverride }: UrunListesiProps) {
     const veriYukle = async () => {
       try {
         setYukleniyor(true);
-        const veriBilgisi = await urunVeritabaniYukle();
-        setVeri(veriBilgisi);
-        setUrunler(veriBilgisi.urunler);
+        const urunlerData = kategoriSlug 
+          ? await urunleriKategoriyeGoreGetir(kategoriSlug)
+          : await tumUrunleriGetir();
+        setUrunler(urunlerData);
         setHata(null);
       } catch (err) {
         setHata("Ürünler yüklenirken hata oluştu");
@@ -57,7 +58,7 @@ export function UrunListesi({ kategoriSlug, titleOverride }: UrunListesiProps) {
     };
 
     veriYukle();
-  }, []);
+  }, [kategoriSlug]);
 
   // Kategoriye göre filtrele
   const filtrelenmisUrunler = aktifKategori 
@@ -109,8 +110,8 @@ export function UrunListesi({ kategoriSlug, titleOverride }: UrunListesiProps) {
   }
 
   // Kategori başlığını al
-  const kategoriAdi = veri && aktifKategori
-    ? veri.kategoriler.find((k) => k.slug === aktifKategori)?.ad
+  const kategoriAdi = aktifKategori
+    ? varsayilanKategoriler.find((k) => k.slug === aktifKategori)?.ad
     : "Tüm Ürünler";
 
   return (
@@ -132,7 +133,7 @@ export function UrunListesi({ kategoriSlug, titleOverride }: UrunListesiProps) {
         </motion.div>
 
         {/* Kategori Filtreleri */}
-        {veri && veri.kategoriler.length > 0 && (
+        {varsayilanKategoriler.length > 0 && (
           <motion.div
             variants={fadeUp}
             initial="hidden"
@@ -154,7 +155,7 @@ export function UrunListesi({ kategoriSlug, titleOverride }: UrunListesiProps) {
               </button>
               
               {/* Kategori butonları */}
-              {veri.kategoriler.map((kat) => (
+              {varsayilanKategoriler.map((kat) => (
                 <button
                   key={kat.slug}
                   onClick={() => setAktifKategori(kat.slug)}

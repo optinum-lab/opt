@@ -22,6 +22,7 @@ export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('');
+  const [isHidden, setIsHidden] = useState(false);
 
   // Handle scroll effect
   useEffect(() => {
@@ -46,6 +47,23 @@ export function Header() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Listen for data-hide-header attribute changes
+  useEffect(() => {
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'data-hide-header') {
+          setIsHidden(document.body.hasAttribute('data-hide-header'));
+        }
+      });
+    });
+
+    observer.observe(document.body, { attributes: true });
+    // Initial check
+    setIsHidden(document.body.hasAttribute('data-hide-header'));
+
+    return () => observer.disconnect();
+  }, []);
+
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
     if (isMobileMenuOpen) {
@@ -60,7 +78,15 @@ export function Header() {
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-50">
+      <motion.header 
+        initial={false}
+        animate={{ 
+          y: isHidden ? -100 : 0,
+          opacity: isHidden ? 0 : 1
+        }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
+        className="fixed top-0 left-0 right-0 z-50"
+      >
         {/* Outer wrapper with padding when scrolled */}
         <div
           className={cn(
@@ -232,7 +258,7 @@ export function Header() {
             </Container>
           </motion.div>
         </div>
-      </header>
+      </motion.header>
 
       {/* Mobile Menu - Full Screen Overlay */}
       <AnimatePresence>

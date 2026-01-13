@@ -1,58 +1,24 @@
 /**
  * Ürün Detay Sayfası - SSR + SEO Optimized
  * URL: /urunler/[slug]
+ * Supabase Backend
  */
 
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import fs from "fs";
-import path from "path";
 import { ProductDetailClient } from "./ProductDetailClient";
 import { BreadcrumbSchema, UrunSeoContent } from "@/components/seo";
-
-// Types
-interface Urun {
-  id: string;
-  ad: string;
-  slug: string;
-  açıklama: string;
-  uzun_açıklama: string;
-  fiyat: number;
-  para_birimi: string;
-  stok: string;
-  uretici: string;
-  kategoriler: string[];
-  gorsel: string;
-  özellikleri: string[];
-  teknik_ozellikler: Record<string, string | number | boolean>;
-}
+import { urunGetirBySlugServer, tumSluglarıGetirServer, Urun } from "@/lib/product-utils";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
-// Ürün verisini sunucu tarafında yükle
-async function getProduct(slug: string): Promise<Urun | null> {
-  try {
-    const filePath = path.join(process.cwd(), "public", "data", "products.json");
-    const fileContents = fs.readFileSync(filePath, "utf8");
-    const data = JSON.parse(fileContents);
-    return data.urunler.find((u: Urun) => u.slug === slug) || null;
-  } catch (error) {
-    console.error("Ürün yükleme hatası:", error);
-    return null;
-  }
-}
-
 // Statik parametreleri oluştur (SSG için)
 export async function generateStaticParams() {
   try {
-    const filePath = path.join(process.cwd(), "public", "data", "products.json");
-    const fileContents = fs.readFileSync(filePath, "utf8");
-    const data = JSON.parse(fileContents);
-    return data.urunler.map((urun: Urun) => ({
-      slug: urun.slug,
-    }));
+    const slugs = await tumSluglarıGetirServer();
+    return slugs.map((slug) => ({ slug }));
   } catch (error) {
     console.error("generateStaticParams hatası:", error);
     return [];
@@ -62,7 +28,7 @@ export async function generateStaticParams() {
 // Dinamik Metadata (SEO için kritik)
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const urun = await getProduct(slug);
+  const urun = await urunGetirBySlugServer(slug);
 
   if (!urun) {
     return {
@@ -73,10 +39,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const baseUrl = "https://www.mattech.com.tr";
   const productUrl = `${baseUrl}/urunler/${urun.slug}`;
+  const aciklama = urun.uzun_aciklama || urun.kisa_aciklama || '';
 
   return {
     title: `${urun.ad} | ${urun.uretici} - Mat Tech`,
-    description: urun.uzun_açıklama || urun.açıklama,
+    description: aciklama,
     keywords: [
       urun.ad,
       urun.uretici,
@@ -90,12 +57,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     },
     openGraph: {
       title: `${urun.ad} - ${urun.uretici}`,
-      description: urun.açıklama,
+      description: aciklama,
       url: productUrl,
       type: "website",
       images: [
         {
-          url: urun.gorsel.startsWith("http") ? urun.gorsel : `${baseUrl}${urun.gorsel}`,
+          url: urun.gorsel?.startsWith("http") ? urun.gorsel : `${baseUrl}${urun.gorsel}`,
           width: 800,
           height: 600,
           alt: urun.ad,
@@ -105,8 +72,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     twitter: {
       card: "summary_large_image",
       title: `${urun.ad} - ${urun.uretici}`,
-      description: urun.açıklama,
-      images: [urun.gorsel.startsWith("http") ? urun.gorsel : `${baseUrl}${urun.gorsel}`],
+      description: aciklama,
+      images: [urun.gorsel?.startsWith("http") ? urun.gorsel : `${baseUrl}${urun.gorsel}`],
     },
   };
 }
@@ -114,13 +81,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 // Product JSON-LD Schema
 function ProductSchema({ urun }: { urun: Urun }) {
   const baseUrl = "https://www.mattech.com.tr";
+  const aciklama = urun.uzun_aciklama || urun.kisa_aciklama || '';
   
   const schema = {
     "@context": "https://schema.org",
     "@type": "Product",
     name: urun.ad,
-    description: urun.uzun_açıklama || urun.açıklama,
-    image: urun.gorsel.startsWith("http") ? urun.gorsel : `${baseUrl}${urun.gorsel}`,
+    description: aciklama,
+    image: urun.gorsel?.startsWith("http") ? urun.gorsel : `${baseUrl}${urun.gorsel}`,
     brand: {
       "@type": "Brand",
       name: urun.uretici,
@@ -136,7 +104,7 @@ function ProductSchema({ urun }: { urun: Urun }) {
       url: `${baseUrl}/urunler/${urun.slug}`,
       priceCurrency: urun.para_birimi || "TRY",
       price: urun.fiyat,
-      availability: urun.stok === "Stokta" 
+      availability: urun.stok_durumu === "stokta" 
         ? "https://schema.org/InStock" 
         : "https://schema.org/OutOfStock",
       seller: {
@@ -175,11 +143,13 @@ function formatKategori(slug: string): string {
 
 export default async function UrunDetayPage({ params }: PageProps) {
   const { slug } = await params;
-  const urun = await getProduct(slug);
+  const urun = await urunGetirBySlugServer(slug);
 
   if (!urun) {
     notFound();
   }
+
+  const aciklama = urun.uzun_aciklama || urun.kisa_aciklama || '';
 
   // Breadcrumb items for schema
   const breadcrumbItems = [
@@ -206,15 +176,15 @@ export default async function UrunDetayPage({ params }: PageProps) {
       <BreadcrumbSchema items={breadcrumbItems} />
       
       {/* Client Component for interactivity */}
-      <ProductDetailClient urun={urun} />
+      <ProductDetailClient urun={urun as any} />
 
       {/* Hidden SEO Content - Görünmez ürün bazlı içerik */}
       <UrunSeoContent
         urunAdi={urun.ad}
         uretici={urun.uretici}
         kategoriler={urun.kategoriler}
-        aciklama={urun.uzun_açıklama || urun.açıklama}
-        ozellikler={urun.özellikleri || []}
+        aciklama={aciklama}
+        ozellikler={urun.ozellikleri || []}
       />
     </>
   );

@@ -8,12 +8,28 @@
 export function HomeSeoContent() {
   return (
     <div className="sr-only" aria-hidden="false">
+      {/* Marka anahtar kelimeler - SEO için kritik */}
+      <div>
+        <h1>mattech - mat tech - Mat Tech Güvenlik Sistemleri İstanbul</h1>
+        <p>
+          mattech | mat tech | MatTech | MATTECH | MAT TECH - İstanbul Perpa&apos;da güvenlik sistemleri uzmanı. 
+          mattech güvenlik, mat tech güvenlik, mattech kamera, mat tech kamera, mattech alarm, mat tech alarm, 
+          mattech bariyer, mat tech bariyer, mattech turnike, mat tech turnike, mattech iletişim, mat tech iletişim, 
+          mattech.com.tr - Profesyonel güvenlik çözümleri için mattech mat tech tercih edin.
+        </p>
+        <p>
+          mattech istanbul, mat tech istanbul, mattech perpa, mat tech perpa, mattech şişli, mat tech şişli, 
+          mattech fiyat, mat tech fiyat, mattech telefon, mat tech telefon numarası 0545 450 65 87.
+          mattech güvenlik sistemleri, mat tech güvenlik sistemleri - Dahua ve Hikvision yetkili bayi mattech.
+        </p>
+      </div>
+      
       <article>
-        <h2>İstanbul Güvenlik Sistemleri Kurulum Hizmetleri</h2>
+        <h2>mattech - Mat Tech İstanbul Güvenlik Sistemleri Kurulum Hizmetleri</h2>
         <section>
-          <h3>Profesyonel Güvenlik Kamerası Kurulumu İstanbul</h3>
+          <h3>mattech Profesyonel Güvenlik Kamerası Kurulumu İstanbul</h3>
           <p>
-            Mat Tech olarak İstanbul genelinde profesyonel güvenlik kamerası kurulum hizmeti sunuyoruz. 
+            mattech (Mat Tech) olarak İstanbul genelinde profesyonel güvenlik kamerası kurulum hizmeti sunuyoruz. 
             Dahua ve Hikvision yetkili bayisi olarak, ev, işyeri, fabrika, plaza, AVM, site, okul, 
             hastane ve tüm ticari alanlar için CCTV ve IP kamera sistemleri kuruyoruz. 4K Ultra HD 
             çözünürlük, gece görüşü, yapay zeka destekli hareket algılama, yüz tanıma ve plaka tanıma 
@@ -126,19 +142,34 @@ export function HomeSeoContent() {
         </section>
 
         <section>
-          <h3>Neden Mat Tech?</h3>
+          <h3>Neden mattech (Mat Tech)?</h3>
+          <p>
+            mattech mat tech güvenlik sistemleri olarak neden tercih edilmeliyiz? 
+            mattech istanbul, mat tech perpa, mattech şişli bölgesinde profesyonel hizmet.
+          </p>
           <ul>
-            <li>10 yılı aşkın sektör tecrübesi</li>
-            <li>Dahua ve Hikvision yetkili bayisi</li>
-            <li>Uzman mühendis ve teknisyen kadrosu</li>
-            <li>Ücretsiz keşif ve fiyat teklifi</li>
-            <li>7/24 teknik destek hattı</li>
-            <li>Garantili ürün ve işçilik</li>
-            <li>Perpa Ticaret Merkezi'nde showroom</li>
-            <li>Taksitli ödeme imkanı</li>
-            <li>Hızlı kurulum ve devreye alma</li>
-            <li>Satış sonrası bakım ve servis</li>
+            <li>mattech - 10 yılı aşkın sektör tecrübesi</li>
+            <li>mat tech - Dahua ve Hikvision yetkili bayisi</li>
+            <li>mattech - Uzman mühendis ve teknisyen kadrosu</li>
+            <li>mat tech - Ücretsiz keşif ve fiyat teklifi</li>
+            <li>mattech - 7/24 teknik destek hattı</li>
+            <li>mat tech - Garantili ürün ve işçilik</li>
+            <li>mattech - Perpa Ticaret Merkezi&apos;nde showroom</li>
+            <li>mat tech - Taksitli ödeme imkanı</li>
+            <li>mattech - Hızlı kurulum ve devreye alma</li>
+            <li>mat tech - Satış sonrası bakım ve servis</li>
           </ul>
+        </section>
+        
+        {/* Marka tekrarı - SEO güçlendirme */}
+        <section>
+          <h3>mattech mat tech İletişim</h3>
+          <p>
+            mattech | mat tech | mattech.com.tr - İstanbul Perpa güvenlik sistemleri. 
+            mattech telefon: 0545 450 65 87 | mat tech adres: Perpa Ticaret Merkezi A Blok Kat:9 No:1288 Şişli/İstanbul.
+            mattech güvenlik kamerası, mat tech yangın alarmı, mattech hırsız alarmı, mat tech bariyer, 
+            mattech turnike, mat tech geçiş kontrol sistemleri için bize ulaşın.
+          </p>
         </section>
       </article>
     </div>

@@ -10,8 +10,16 @@ export function WebsiteSchema() {
     '@id': 'https://www.mattech.com.tr/#website',
     url: 'https://www.mattech.com.tr',
     name: 'Mat Tech',
+    alternateName: [
+      'mattech',
+      'mat tech',
+      'MatTech',
+      'MATTECH',
+      'MAT TECH',
+      'mattech.com.tr',
+    ],
     description:
-      'Profesyonel güvenlik kamera sistemleri ve CCTV çözümleri. Dahua ve Hikvision ürünleri.',
+      'mattech - mat tech - İstanbul Perpa\'da profesyonel güvenlik kamera sistemleri, alarm, bariyer ve geçiş kontrol çözümleri. Dahua ve Hikvision yetkili bayisi.',
     publisher: {
       '@id': 'https://www.mattech.com.tr/#organization',
     },

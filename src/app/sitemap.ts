@@ -1,12 +1,11 @@
 import { MetadataRoute } from 'next';
-import fs from 'fs';
-import path from 'path';
+import { tumSluglarıGetirServer } from '@/lib/product-utils';
 
 /**
  * Sitemap Generator
- * SEO için optimize edilmiş sitemap - tüm güvenlik hizmetleri dahil
+ * SEO için optimize edilmiş sitemap - Supabase Backend
  */
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://www.mattech.com.tr';
   
   // Ana sayfalar - Yüksek öncelikli
@@ -41,21 +40,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: cat.priority,
   }));
 
-  // Ürün detay sayfaları - JSON dosyasından oku
+  // Ürün detay sayfaları - Supabase'den çek
   let productPages: MetadataRoute.Sitemap = [];
   try {
-    const filePath = path.join(process.cwd(), 'public', 'data', 'products.json');
-    const fileContents = fs.readFileSync(filePath, 'utf8');
-    const productsData = JSON.parse(fileContents);
-    
-    productPages = productsData.urunler.map((product: any) => ({
-      url: `${baseUrl}/urunler/${product.slug}`,
+    const slugs = await tumSluglarıGetirServer();
+    productPages = slugs.map((slug) => ({
+      url: `${baseUrl}/urunler/${slug}`,
       lastModified: new Date(),
       changeFrequency: 'weekly' as const,
       priority: 0.7,
     }));
   } catch (error) {
-    console.error('Products JSON okuma hatası:', error);
+    console.error('Sitemap ürün çekme hatası:', error);
   }
 
   // Yasal sayfalar - Düşük öncelik ama gerekli

@@ -1,6 +1,7 @@
 /**
  * Products Section Component
  * Grid-based product showcase with hover animations
+ * Supabase Backend
  */
 
 'use client';
@@ -14,7 +15,7 @@ import {
   defaultViewport,
 } from '@/lib/animations';
 import { useEffect, useState } from 'react';
-import { Urun } from '@/lib/product-utils';
+import { Urun, tumUrunleriGetir } from '@/lib/product-utils';
 import { cn } from '@/lib/utils';
 
 // ============================================
@@ -23,11 +24,23 @@ import { cn } from '@/lib/utils';
 
 export function Products() {
   const [urunler, setUrunler] = useState<Urun[]>([]);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    fetch('/data/products.json')
-      .then((res) => res.json())
-      .then((data) => setUrunler(data.urunler.slice(0, 6))) // İlk 6 ürünü göster
-      .catch(() => setUrunler([]));
+    async function fetchProducts() {
+      try {
+        const data = await tumUrunleriGetir();
+        // İlk 6 ürünü göster (tercihen öne çıkanları)
+        const oneOlanlar = data.filter(u => u.one_cikan);
+        const gosterilecek = oneOlanlar.length >= 6 ? oneOlanlar.slice(0, 6) : data.slice(0, 6);
+        setUrunler(gosterilecek);
+      } catch {
+        setUrunler([]);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchProducts();
   }, []);
 
   return (

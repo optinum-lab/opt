@@ -154,7 +154,7 @@ export const services = [
 
 export const navLinks = [
   { href: '#features', label: 'Hizmetlerimiz' },
-  { href: '/urunler', label: 'Ürünler' },
+  { href: '/montaj-kampanyalarimiz', label: 'Kampanyalar' },
   { href: '#how-it-works', label: 'Nasıl Çalışır' },
   { href: '#testimonials', label: 'Referanslar' },
   { href: '#contact', label: 'İletişim' },

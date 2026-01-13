@@ -12,6 +12,7 @@ import { Footer } from '@/components/layout/Footer';
 import { WhatsAppSupport } from '@/components/WhatsAppSupport';
 import { OrganizationSchema, WebsiteSchema, LocalBusinessSchema, ServiceSchema, FAQSchema } from '@/components/seo';
 import { GoogleAnalytics, GoogleTagManager } from '@/components/analytics';
+import { ExchangeRateProvider } from '@/lib/useExchangeRate';
 
 // ============================================
 // Font Configuration
@@ -30,16 +31,41 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.mattech.com.tr'),
   title: {
-    default: 'Mat Tech | Güvenlik Kamera, Yangın Alarm, Bariyer ve Geçiş Kontrol Sistemleri İstanbul',
-    template: '%s | Mat Tech Güvenlik Sistemleri',
+    default: 'mattech - Mat Tech | Güvenlik Kamera, Yangın Alarm, Bariyer Sistemleri İstanbul',
+    template: '%s | mattech - Mat Tech',
   },
   description:
-    'İstanbul Perpa\'da 10+ yıllık tecrübe ile güvenlik kamerası, yangın alarm sistemi, hırsız alarmı, bariyer, turnike ve geçiş kontrol sistemleri kurulumu. Dahua & Hikvision yetkili bayi. ✓ Ücretsiz Keşif ✓ 7/24 Teknik Destek ✓ Profesyonel Montaj',
+    'mattech (mat tech) - İstanbul Perpa\'da 10+ yıllık tecrübe ile güvenlik kamerası, yangın alarm sistemi, hırsız alarmı, bariyer, turnike ve geçiş kontrol sistemleri kurulumu. Dahua & Hikvision yetkili bayi. ✓ Ücretsiz Keşif ✓ 7/24 Teknik Destek',
   keywords: [
-    // Marka
+    // Marka - Tüm Varyasyonlar
+    'mattech',
+    'mat tech',
+    'MatTech',
+    'MATTECH',
+    'MAT TECH',
     'Mat Tech',
-    'Mat Tech güvenlik',
+    'mattech güvenlik',
+    'mat tech güvenlik',
     'mattech güvenlik sistemleri',
+    'mat tech güvenlik sistemleri',
+    'mattech.com.tr',
+    'mattech istanbul',
+    'mat tech istanbul',
+    'mattech perpa',
+    'mat tech perpa',
+    'mattech kamera',
+    'mat tech kamera',
+    'mattech alarm',
+    'mat tech alarm',
+    'mattech bariyer',
+    'mat tech bariyer',
+    'mattech turnike',
+    'mat tech turnike',
+    'mattech iletişim',
+    'mat tech iletişim',
+    'mattech telefon',
+    'mat tech telefon',
+    'Mat Tech güvenlik',
     // Güvenlik Kameraları
     'güvenlik kamerası',
     'güvenlik kamerası fiyatları',
@@ -151,9 +177,9 @@ export const metadata: Metadata = {
     'güvenlik sistemi bakım',
     'güvenlik danışmanlık',
   ],
-  authors: [{ name: 'Mat Tech Güvenlik Sistemleri' }],
-  creator: 'Mat Tech',
-  publisher: 'Mat Tech',
+  authors: [{ name: 'mattech - Mat Tech Güvenlik Sistemleri' }],
+  creator: 'mattech',
+  publisher: 'mattech - Mat Tech',
   alternates: {
     canonical: 'https://www.mattech.com.tr',
   },
@@ -161,25 +187,25 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'tr_TR',
     url: 'https://www.mattech.com.tr',
-    siteName: 'Mat Tech Güvenlik Sistemleri',
-    title: 'Mat Tech | Güvenlik Kamera, Alarm, Bariyer Sistemleri İstanbul',
+    siteName: 'mattech - Mat Tech Güvenlik Sistemleri',
+    title: 'mattech - Mat Tech | Güvenlik Kamera, Alarm, Bariyer Sistemleri İstanbul',
     description:
-      'İstanbul\'da profesyonel güvenlik çözümleri: Kamera, yangın alarmı, hırsız alarmı, bariyer, turnike ve geçiş kontrol sistemleri. Dahua & Hikvision yetkili bayi. 10+ yıl tecrübe.',
+      'mattech (mat tech) - İstanbul\'da profesyonel güvenlik çözümleri: Kamera, yangın alarmı, hırsız alarmı, bariyer, turnike ve geçiş kontrol sistemleri. Dahua & Hikvision yetkili bayi.',
     images: [
       {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'Mat Tech - Güvenlik Kamera ve Alarm Sistemleri İstanbul',
+        alt: 'mattech - Mat Tech Güvenlik Kamera ve Alarm Sistemleri İstanbul',
         type: 'image/png',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Mat Tech | Güvenlik Sistemleri İstanbul',
+    title: 'mattech - Mat Tech | Güvenlik Sistemleri İstanbul',
     description:
-      'Güvenlik kamerası, yangın alarmı, hırsız alarmı, bariyer ve turnike sistemleri. Profesyonel kurulum, 7/24 destek.',
+      'mattech (mat tech) - Güvenlik kamerası, yangın alarmı, hırsız alarmı, bariyer ve turnike sistemleri. Profesyonel kurulum, 7/24 destek.',
     creator: '@mattech',
     images: ['/og-image.png'],
     site: '@mattech',
@@ -280,6 +306,7 @@ export default async function RootLayout({
         )}
         
         <ThemeProvider>
+          <ExchangeRateProvider>
           {/* Skip to main content link for accessibility */}
           <a
             href="#main-content"
@@ -299,6 +326,7 @@ export default async function RootLayout({
 
           {/* WhatsApp Support Button - Admin sayfalarında gösterme */}
           {!isAdminRoute && <WhatsAppSupport />}
+          </ExchangeRateProvider>
         </ThemeProvider>
       </body>
     </html>

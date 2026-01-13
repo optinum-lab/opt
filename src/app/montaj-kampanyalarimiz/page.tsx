@@ -1,6 +1,6 @@
 /**
  * Montaj Kampanyalarımız Sayfası
- * URL: /kampanyalarimiz
+ * URL: /montaj-kampanyalarimiz
  * Komple montaj dahil kampanya paketleri
  */
 
@@ -13,13 +13,13 @@ export const metadata: Metadata = {
   description:
     "Montaj dahil güvenlik kamerası paketleri. 4'lü, 8'li, 16'lı kamera sistemleri profesyonel kurulum ile. Ücretsiz keşif ve teknik destek.",
   alternates: {
-    canonical: "https://www.mattech.com.tr/kampanyalarimiz",
+    canonical: "https://www.mattech.com.tr/montaj-kampanyalarimiz",
   },
   openGraph: {
     title: "Montaj Kampanyalarımız | Mat Tech Güvenlik Sistemleri",
     description:
       "Montaj dahil güvenlik kamera paketleri. Profesyonel kurulum, garanti ve teknik destek bir arada.",
-    url: "https://www.mattech.com.tr/kampanyalarimiz",
+    url: "https://www.mattech.com.tr/montaj-kampanyalarimiz",
     type: "website",
   },
   keywords: [
