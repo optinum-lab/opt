@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next';
-import productsData from '@/../../public/data/products.json';
+import fs from 'fs';
+import path from 'path';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://www.mattech.com.tr';
@@ -36,13 +37,22 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
-  // Ürün detay sayfaları
-  const productPages = productsData.urunler.map((product: any) => ({
-    url: `${baseUrl}/urunler/detail/${product.slug}`,
-    lastModified: new Date(),
-    changeFrequency: 'weekly' as const,
-    priority: 0.7,
-  }));
+  // Ürün detay sayfaları - JSON dosyasını runtime'da oku
+  let productPages: MetadataRoute.Sitemap = [];
+  try {
+    const filePath = path.join(process.cwd(), 'public', 'data', 'products.json');
+    const fileContents = fs.readFileSync(filePath, 'utf8');
+    const productsData = JSON.parse(fileContents);
+    
+    productPages = productsData.urunler.map((product: any) => ({
+      url: `${baseUrl}/urunler/detail/${product.slug}`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly' as const,
+      priority: 0.7,
+    }));
+  } catch (error) {
+    console.error('Products JSON okuma hatası:', error);
+  }
 
   // Yasal sayfalar
   const legalPages = [
