@@ -127,18 +127,18 @@ export default function NotFound() {
             transition={{ duration: 0.6, delay: 0.6 }}
             className="flex flex-col sm:flex-row items-center justify-center gap-4"
           >
-            <Button asChild size="lg" className="min-w-[200px]">
-              <Link href="/" className="flex items-center gap-2">
+            <Link href="/">
+              <Button size="lg" className="min-w-[200px] flex items-center gap-2">
                 <Icon name="home" size={18} />
                 Ana Sayfaya Dön
-              </Link>
-            </Button>
-            <Button asChild variant="outline" size="lg" className="min-w-[200px]">
-              <Link href="/urunler" className="flex items-center gap-2">
+              </Button>
+            </Link>
+            <Link href="/urunler">
+              <Button variant="outline" size="lg" className="min-w-[200px] flex items-center gap-2">
                 <Icon name="package" size={18} />
                 Ürünleri İncele
-              </Link>
-            </Button>
+              </Button>
+            </Link>
           </motion.div>
 
           {/* Help Text */}
