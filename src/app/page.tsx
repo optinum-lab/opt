@@ -14,6 +14,7 @@ import {
   Testimonials,
   Contact,
 } from '@/components/sections';
+import { HomeSeoContent } from '@/components/seo';
 
 export const metadata: Metadata = {
   title: 'Mat Tech | Güvenlik Kamerası, Yangın Alarm, Bariyer Sistemleri İstanbul',
@@ -57,6 +58,9 @@ export default function Home() {
 
       {/* Contact Section - Form and contact info */}
       <Contact />
+
+      {/* Hidden SEO Content - Görünmez sektörel içerik */}
+      <HomeSeoContent />
     </>
   );
 }

@@ -16,7 +16,7 @@ export function ServiceSchema({ serviceName }: ServiceSchemaProps = {}) {
     '@id': 'https://www.mattech.com.tr/#services',
     name: 'Mat Tech Güvenlik Hizmetleri',
     description: 'Profesyonel güvenlik sistemleri kurulum ve bakım hizmetleri',
-    numberOfItems: 8,
+    numberOfItems: 9,
     itemListElement: [
       {
         '@type': 'ListItem',
@@ -245,6 +245,38 @@ export function ServiceSchema({ serviceName }: ServiceSchemaProps = {}) {
           },
         },
       },
+      {
+        '@type': 'ListItem',
+        position: 9,
+        item: {
+          '@type': 'Service',
+          '@id': 'https://www.mattech.com.tr/#plaka-tanima',
+          name: 'Plaka Tanıma Sistemleri',
+          alternateName: ['ANPR Sistemi', 'LPR Kamera', 'Araç Plaka Okuma', 'Otopark Plaka Tanıma', 'Otomatik Plaka Tanıma'],
+          description: 'ANPR/LPR teknolojisi ile yüksek doğruluklu araç plaka tanıma sistemleri. Otopark giriş-çıkış yönetimi, site ve fabrika araç takibi, bariyer entegrasyonu. Plaka tabanlı geçiş kontrolü ile güvenli ve hızlı araç geçişi.',
+          provider: {
+            '@type': 'LocalBusiness',
+            name: 'Mat Tech',
+            '@id': 'https://www.mattech.com.tr/#organization',
+          },
+          areaServed: {
+            '@type': 'City',
+            name: 'İstanbul',
+          },
+          serviceType: 'Plaka Tanıma Sistemi Kurulumu',
+          category: 'Araç Geçiş Kontrol',
+          hasOfferCatalog: {
+            '@type': 'OfferCatalog',
+            name: 'Plaka Tanıma Çözümleri',
+            itemListElement: [
+              { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'ANPR Kamera Kurulumu' } },
+              { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Otopark Plaka Tanıma' } },
+              { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Bariyer Entegrasyonu' } },
+              { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Araç Takip Sistemi' } },
+            ],
+          },
+        },
+      },
     ],
   };
 
@@ -328,6 +360,14 @@ export function FAQSchema() {
         acceptedAnswer: {
           '@type': 'Answer',
           text: 'Evet, BTK (Bilgi Teknolojileri ve İletişim Kurumu) onaylı ve lisanslı GSM sinyal güçlendiriciler yasaldır. Mat Tech olarak sadece yasal ve sertifikalı ürünler satıp kuruyoruz.',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'Plaka tanıma sistemi nasıl çalışır?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Plaka tanıma sistemleri (ANPR/LPR), özel kameralar ve yapıy zeka yazılımı ile araç plakalarını otomatik olarak okur. Otopark giriş-çıkışı, site ve fabrika araç takibi, bariyer entegrasyonu gibi amaçlarla kullanılır. Kayıtlı plakalar için otomatik bariyer açma özelliği sağlar.',
         },
       },
     ],

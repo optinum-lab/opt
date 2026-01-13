@@ -126,6 +126,19 @@ export const metadata: Metadata = {
     'LTE sinyal güçlendirici',
     'cep telefonu çekmiyor',
     'sinyal yok çözümü',
+    // Plaka Tanıma Sistemleri
+    'plaka tanıma sistemi',
+    'plaka okuma sistemi',
+    'ANPR sistemi',
+    'LPR kamera',
+    'otomatik plaka tanıma',
+    'araç plaka okuyucu',
+    'otopark plaka tanıma',
+    'site plaka tanıma',
+    'plaka tanıma kamerası',
+    'plaka tanıma yazılımı',
+    'araç takip sistemi',
+    'plaka tanıma bariyer entegrasyonu',
     // Konum bazlı
     'İstanbul güvenlik kamerası',
     'Perpa güvenlik sistemleri',
@@ -220,11 +233,20 @@ export const viewport: Viewport = {
 // Root Layout Component
 // ============================================
 
-export default function RootLayout({
+import { headers } from 'next/headers';
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Pathname'i al
+  const headersList = await headers();
+  const pathname = headersList.get('x-pathname') || '';
+  
+  // Sadece panel sayfalarında header/footer gösterme
+  const isAdminRoute = pathname.startsWith('/panel');
+
   return (
     <html lang="tr" suppressHydrationWarning>
       <head>
@@ -266,17 +288,17 @@ export default function RootLayout({
             Ana içeriğe atla
           </a>
 
-          {/* Header */}
-          <Header />
+          {/* Header - Admin sayfalarında gösterme */}
+          {!isAdminRoute && <Header />}
 
           {/* Main Content */}
           <main id="main-content">{children}</main>
 
-          {/* Footer */}
-          <Footer />
+          {/* Footer - Admin sayfalarında gösterme */}
+          {!isAdminRoute && <Footer />}
 
-          {/* WhatsApp Support Button */}
-          <WhatsAppSupport />
+          {/* WhatsApp Support Button - Admin sayfalarında gösterme */}
+          {!isAdminRoute && <WhatsAppSupport />}
         </ThemeProvider>
       </body>
     </html>

@@ -8,3 +8,4 @@ export { WebsiteSchema } from './WebsiteSchema';
 export { BreadcrumbSchema } from './BreadcrumbSchema';
 export { LocalBusinessSchema } from './LocalBusinessSchema';
 export { ServiceSchema, FAQSchema } from './ServiceSchema';
+export { HomeSeoContent, KategoriSeoContent, UrunSeoContent } from './HiddenSeoContent';

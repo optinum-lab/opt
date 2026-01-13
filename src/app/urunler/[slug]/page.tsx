@@ -8,7 +8,7 @@ import { notFound } from "next/navigation";
 import fs from "fs";
 import path from "path";
 import { ProductDetailClient } from "./ProductDetailClient";
-import { BreadcrumbSchema } from "@/components/seo";
+import { BreadcrumbSchema, UrunSeoContent } from "@/components/seo";
 
 // Types
 interface Urun {
@@ -207,6 +207,15 @@ export default async function UrunDetayPage({ params }: PageProps) {
       
       {/* Client Component for interactivity */}
       <ProductDetailClient urun={urun} />
+
+      {/* Hidden SEO Content - Görünmez ürün bazlı içerik */}
+      <UrunSeoContent
+        urunAdi={urun.ad}
+        uretici={urun.uretici}
+        kategoriler={urun.kategoriler}
+        aciklama={urun.uzun_açıklama || urun.açıklama}
+        ozellikler={urun.özellikleri || []}
+      />
     </>
   );
 }

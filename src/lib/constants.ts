@@ -137,6 +137,15 @@ export const services = [
     keywords: ['GSM sinyal güçlendirici', 'cep telefonu sinyal güçlendirici', 'GSM repeater', 'mobil sinyal amplifikatörü', '4G sinyal güçlendirici', '5G sinyal güçlendirici'],
     features: ['4G/5G LTE Desteği', 'Geniş Kapsama Alanı', 'Kolay Kurulum', 'Tüm Operatörler', 'Yasal ve Lisanslı'],
   },
+  {
+    id: 'plaka-tanima',
+    name: 'Plaka Tanıma Sistemleri',
+    shortName: 'Plaka Tanıma',
+    description: 'Otomatik plaka tanıma (ANPR/LPR) sistemleri ile otopark, site ve işyeri giriş çıkış kontrolü. Bariyer entegrasyonu, araç takibi ve raporlama özellikleri.',
+    icon: 'car',
+    keywords: ['plaka tanıma sistemi', 'ANPR', 'LPR kamera', 'otomatik plaka okuma', 'otopark plaka tanıma', 'araç plaka okuyucu'],
+    features: ['Otomatik Plaka Okuma', 'Bariyer Entegrasyonu', 'Kara Liste Uyaırısı', 'Raporlama', 'Gece Görüş Desteği'],
+  },
 ];
 
 // ============================================

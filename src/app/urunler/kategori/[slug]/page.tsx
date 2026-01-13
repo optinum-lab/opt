@@ -7,6 +7,7 @@ import { notFound } from "next/navigation";
 import { UrunListesi } from "@/components/sections";
 import { Container } from "@/components/ui";
 import { Metadata } from "next";
+import { KategoriSeoContent } from "@/components/seo";
 
 interface KategoriPageProps {
   params: Promise<{
@@ -102,6 +103,9 @@ export default async function KategoriPage({ params }: KategoriPageProps) {
 
       {/* Ürün Listesi */}
       <UrunListesi kategoriSlug={slug} />
+
+      {/* Hidden SEO Content - Görünmez kategori bazlı içerik */}
+      <KategoriSeoContent kategoriSlug={slug} kategoriAdi={kategoriAdi} />
     </main>
   );
 }

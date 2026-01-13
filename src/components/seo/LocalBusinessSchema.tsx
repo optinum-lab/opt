@@ -131,6 +131,14 @@ export function LocalBusinessSchema() {
           description: 'Bina içi zayıf GSM sinyalini güçlendiren 4G/5G repeater sistemleri',
         },
       },
+      {
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: 'Plaka Tanıma Sistemi Kurulumu',
+          description: 'ANPR/LPR teknolojisi ile araç plaka tanıma ve otopark yönetim sistemleri',
+        },
+      },
     ],
     aggregateRating: {
       '@type': 'AggregateRating',
