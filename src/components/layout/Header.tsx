@@ -142,7 +142,7 @@ export function Header() {
                           
                           // Eğer ana sayfada değilsek, önce ana sayfaya git
                           if (window.location.pathname !== '/') {
-                            window.location.href = '/' + link.href;
+                            window.location.href = '/?home=true' + link.href;
                           } else {
                             // Ana sayfadaysak direkt scroll et
                             const element = document.getElementById(targetId);
@@ -158,7 +158,7 @@ export function Header() {
                       return (
                         <Link
                           key={link.href}
-                          href={link.href.startsWith('#') ? '/' + link.href : link.href}
+                          href={link.href.startsWith('#') ? '/?home=true' + link.href : link.href}
                           onClick={handleClick}
                           className={cn(
                             'relative px-4 py-2 text-sm font-medium rounded-full transition-all duration-300',
@@ -308,7 +308,7 @@ export function Header() {
                     }}
                   >
                     <a
-                      href={link.href.startsWith('#') ? '/' + link.href : link.href}
+                      href={link.href.startsWith('#') ? '/?home=true' + link.href : link.href}
                       onClick={(e) => {
                         if (link.href.startsWith('#')) {
                           e.preventDefault();
@@ -316,7 +316,7 @@ export function Header() {
                           
                           // Eğer ana sayfada değilsek, önce ana sayfaya git
                           if (window.location.pathname !== '/') {
-                            window.location.href = '/' + link.href;
+                            window.location.href = '/?home=true' + link.href;
                           } else {
                             // Ana sayfadaysak direkt scroll et
                             const element = document.getElementById(targetId);

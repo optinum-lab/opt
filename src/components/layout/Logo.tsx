@@ -31,7 +31,7 @@ export function Logo({ className, showText = true }: LogoProps) {
 
   return (
     <Link
-      href="/"
+      href="/?home=true"
       className={cn(
         'flex items-center gap-2 group',
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:rounded-lg',
