@@ -1,6 +1,8 @@
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { useMemo, useRef, useEffect, useState } from 'react';
 import * as THREE from 'three';
+import { shouldDisable3DAnimations, detectDeviceCapabilities } from '@/lib/deviceOptimization';
+import { scrollManager } from '@/lib/scrollManager';
 
 const AntigravityInner = ({
   count = 300,
@@ -177,34 +179,47 @@ const AntigravityInner = ({
 
 const Antigravity = props => {
   const [scrollY, setScrollY] = useState(0);
-  const [isMobile, setIsMobile] = useState(false);
+  const [deviceCaps, setDeviceCaps] = useState(null);
 
   useEffect(() => {
-    // Mobil cihaz kontrolü
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768 || 'ontouchstart' in window);
-    };
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
+    // Detect device capabilities
+    const caps = detectDeviceCapabilities();
+    setDeviceCaps(caps);
 
-    // Scroll dinleyicisi
-    const handleScroll = () => {
-      setScrollY(window.scrollY);
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    // Skip rendering on low-end devices or when animations should be disabled
+    if (shouldDisable3DAnimations()) {
+      return;
+    }
 
-    return () => {
-      window.removeEventListener('resize', checkMobile);
-      window.removeEventListener('scroll', handleScroll);
-    };
+    // Register with scroll manager instead of direct listener
+    const unsubscribe = scrollManager.register('antigravity', (y) => {
+      setScrollY(y);
+    });
+
+    return unsubscribe;
   }, []);
+
+  // Don't render on low-end devices or when 3D animations should be disabled
+  if (shouldDisable3DAnimations()) {
+    return null;
+  }
+
+  // Adjust particle count based on device capabilities
+  const particleCount = deviceCaps ? 
+    Math.min(deviceCaps.maxParticles, props.count || 300) : 
+    props.count || 300;
 
   return (
     <Canvas 
       camera={{ position: [0, 0, 50], fov: 35 }}
       style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0 }}
     >
-      <AntigravityInner {...props} scrollY={scrollY} isMobile={isMobile} />
+      <AntigravityInner 
+        {...props} 
+        scrollY={scrollY} 
+        isMobile={deviceCaps?.isMobile}
+        count={particleCount}
+      />
     </Canvas>
   );
 };

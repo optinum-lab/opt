@@ -382,6 +382,68 @@ img {
   }
 }
 
+/* Mobile Performance Optimizations */
+@media (max-width: 768px) {
+  /* Disable expensive blur effects on mobile */
+  .blur-\[120px\],
+  .blur-\[100px\],
+  .blur-\[80px\],
+  .blur-\[60px\] {
+    filter: none !important;
+  }
+  
+  /* Disable backdrop blur on mobile - expensive operation */
+  .backdrop-blur,
+  .backdrop-blur-sm,
+  .backdrop-blur-md {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* Disable complex animations on low-end devices */
+  .animate-float {
+    animation: none !important;
+  }
+
+  /* Simplify glass morphism on mobile */
+  .glass,
+  .glass-card,
+  .glass-nav {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* Improve scrolling performance */
+  body {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: auto;
+  }
+
+  /* Disable will-change on most elements except critical ones */
+  *:not(button):not(a):not([data-animate]) {
+    will-change: auto !important;
+  }
+}
+
+/* Add will-change to animated elements for better performance */
+[data-animate],
+.animate-fade-in,
+.animate-fade-up,
+.animate-float,
+.animate-pulse-soft {
+  will-change: transform, opacity;
+}
+
+/* Critical animations for hero should always work */
+@media (min-width: 769px) {
+  /* Only enable expensive effects on desktop */
+  .motion-reduce {
+    @media (prefers-reduced-motion: no-preference) {
+      animation: inherit;
+    }
+  }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

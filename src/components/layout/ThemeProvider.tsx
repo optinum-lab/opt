@@ -1,11 +1,12 @@
 /**
  * Theme Provider Component
  * Handles dark/light mode switching with system preference support
+ * Memoized to prevent unnecessary re-renders
  */
 
 'use client';
 
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState, useCallback, memo } from 'react';
 
 // ============================================
 // Types
@@ -30,7 +31,7 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 // Provider Component
 // ============================================
 
-export function ThemeProvider({ children }: { children: React.ReactNode }) {
+const ThemeProviderInner = ({ children }: { children: React.ReactNode }) => {
   const [theme, setTheme] = useState<Theme>('system');
   const [resolvedTheme, setResolvedTheme] = useState<'light' | 'dark'>('light');
   const [mounted, setMounted] = useState(false);
@@ -44,16 +45,14 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     setMounted(true);
   }, []);
 
-  // Handle theme changes
-  useEffect(() => {
-    if (!mounted) return;
-
+  // Handle theme changes with debouncing to prevent excessive re-renders
+  const applyTheme = useCallback((themeToApply: Theme) => {
     const root = document.documentElement;
     const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches
       ? 'dark'
       : 'light';
 
-    const resolved = theme === 'system' ? systemTheme : theme;
+    const resolved = themeToApply === 'system' ? systemTheme : themeToApply;
     setResolvedTheme(resolved);
 
     // Apply theme class
@@ -64,8 +63,13 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     }
 
     // Store preference
-    localStorage.setItem('theme', theme);
-  }, [theme, mounted]);
+    localStorage.setItem('theme', themeToApply);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+    applyTheme(theme);
+  }, [theme, mounted, applyTheme]);
 
   // Listen for system theme changes
   useEffect(() => {
@@ -96,7 +100,10 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       </div>
     </ThemeContext.Provider>
   );
-}
+};
+
+// Memoize the provider to prevent unnecessary re-renders
+export const ThemeProvider = memo(ThemeProviderInner);
 
 // ============================================
 // Hook

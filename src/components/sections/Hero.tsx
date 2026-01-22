@@ -7,6 +7,7 @@
 
 import { motion, useScroll, useSpring, useTransform } from 'motion/react';
 import { useTheme } from '@/components/layout/ThemeProvider';
+import { useDeviceCapabilities } from '@/lib/deviceOptimization';
 import Image from 'next/image';
 import { Container, Button, Badge, Icon } from '@/components/ui';
 import {
@@ -23,11 +24,26 @@ import { stats } from '@/lib/constants';
 // ============================================
 
 export function Hero() {
+  const deviceCaps = useDeviceCapabilities();
+
   // Parallax for monitor showcase - full page scroll
+  // Disable parallax on mobile devices
   const { scrollYProgress } = useScroll();
-  const rawScale = useTransform(scrollYProgress, [0.04, 0.32, 0.70], [0.985, 1.035, 0.99]);
-  const rawY = useTransform(scrollYProgress, [0.04, 0.32, 0.70], [14, -14, 8]);
-  const rawRotateX = useTransform(scrollYProgress, [0.04, 0.32, 0.70], [3, -4, 2]);
+  const rawScale = useTransform(
+    scrollYProgress, 
+    deviceCaps.isMobile ? [0, 1] : [0.04, 0.32, 0.70], 
+    deviceCaps.isMobile ? [1, 1] : [0.985, 1.035, 0.99]
+  );
+  const rawY = useTransform(
+    scrollYProgress,
+    deviceCaps.isMobile ? [0, 1] : [0.04, 0.32, 0.70],
+    deviceCaps.isMobile ? [0, 0] : [14, -14, 8]
+  );
+  const rawRotateX = useTransform(
+    scrollYProgress,
+    deviceCaps.isMobile ? [0, 1] : [0.04, 0.32, 0.70],
+    deviceCaps.isMobile ? [0, 0] : [3, -4, 2]
+  );
   const monitorScale = useSpring(rawScale, { stiffness: 150, damping: 20, mass: 0.85 });
   const monitorY = useSpring(rawY, { stiffness: 150, damping: 20, mass: 0.85 });
   const monitorRotateX = useSpring(rawRotateX, { stiffness: 150, damping: 20, mass: 0.85 });

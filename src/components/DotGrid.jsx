@@ -2,6 +2,7 @@
 import { useRef, useEffect, useCallback, useMemo } from 'react';
 import { gsap } from 'gsap';
 import { InertiaPlugin } from 'gsap/InertiaPlugin';
+import { shouldDisableCanvasAnimations, detectDeviceCapabilities } from '@/lib/deviceOptimization';
 
 import './DotGrid.css';
 
@@ -46,6 +47,7 @@ const DotGrid = ({
   const wrapperRef = useRef(null);
   const canvasRef = useRef(null);
   const dotsRef = useRef([]);
+  const deviceCapsRef = useRef(detectDeviceCapabilities());
   const pointerRef = useRef({
     x: 0,
     y: 0,
@@ -56,6 +58,9 @@ const DotGrid = ({
     lastX: 0,
     lastY: 0
   });
+
+  // Don't render animations on mobile devices
+  const shouldSkipAnimations = useMemo(() => shouldDisableCanvasAnimations(), []);
 
   const baseRgb = useMemo(() => hexToRgb(baseColor), [baseColor]);
   const activeRgb = useMemo(() => hexToRgb(activeColor), [activeColor]);
@@ -130,7 +135,7 @@ const DotGrid = ({
         const dsq = dx * dx + dy * dy;
 
         let style = baseColor;
-        if (dsq <= proxSq) {
+        if (dsq <= proxSq && !shouldSkipAnimations) {
           const dist = Math.sqrt(dsq);
           const t = 1 - dist / proximity;
           const r = Math.round(baseRgb.r + (activeRgb.r - baseRgb.r) * t);
@@ -151,7 +156,7 @@ const DotGrid = ({
 
     draw();
     return () => cancelAnimationFrame(rafId);
-  }, [proximity, baseColor, activeRgb, baseRgb, circlePath]);
+  }, [proximity, baseColor, activeRgb, baseRgb, circlePath, shouldSkipAnimations]);
 
   useEffect(() => {
     buildGrid();
@@ -169,6 +174,11 @@ const DotGrid = ({
   }, [buildGrid]);
 
   useEffect(() => {
+    // Skip mouse event handlers on mobile
+    if (shouldSkipAnimations) {
+      return;
+    }
+
     const onMove = e => {
       const now = performance.now();
       const pr = pointerRef.current;
@@ -254,7 +264,7 @@ const DotGrid = ({
       window.removeEventListener('mousemove', throttledMove);
       window.removeEventListener('click', onClick);
     };
-  }, [maxSpeed, speedTrigger, proximity, resistance, returnDuration, shockRadius, shockStrength]);
+  }, [maxSpeed, speedTrigger, proximity, resistance, returnDuration, shockRadius, shockStrength, shouldSkipAnimations]);
 
   return (
     <section className={`dot-grid ${className}`} style={style}>
