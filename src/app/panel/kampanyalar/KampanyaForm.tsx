@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import { CldUploadWidget } from 'next-cloudinary';
@@ -162,7 +162,22 @@ export function KampanyaForm({ kampanya }: KampanyaFormProps) {
     teknik_ozellikler: (kampanya?.teknik_ozellikler || []).join('\n'),
     avantajlar: (kampanya?.avantajlar || []).join('\n'),
     sss: kampanya?.sss || [],
+    fiyat_usd: kampanya?.fiyat_usd || '', // Dolar fiyatı
   });
+
+  // Kur state
+  const [usdToTry, setUsdToTry] = useState<number | null>(null);
+
+  // Kur çekme
+  useEffect(() => {
+    fetch('https://api.exchangerate.host/latest?base=USD&symbols=TRY')
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.rates && data.rates.TRY) {
+          setUsdToTry(data.rates.TRY);
+        }
+      });
+  }, []);
 
   // Slug'un manuel olarak değiştirilip değiştirilmediğini takip et
   const [slugManuallyEdited, setSlugManuallyEdited] = useState(!!kampanya?.slug);
@@ -218,6 +233,7 @@ export function KampanyaForm({ kampanya }: KampanyaFormProps) {
         aktif: formData.aktif,
         // Yeni alanlar
         fiyat: formData.fiyat || null,
+        fiyat_usd: formData.fiyat_usd || null,
         eski_fiyat: formData.eski_fiyat || null,
         badge: formData.badge || null,
         renk: formData.renk || null,
@@ -371,23 +387,36 @@ export function KampanyaForm({ kampanya }: KampanyaFormProps) {
                 />
               </div>
 
-              {/* Fiyat ve Eski Fiyat */}
+              {/* Dolar Fiyatı, TL Fiyatı ve Eski Fiyat */}
               <div className="grid grid-cols-2 gap-4 mb-4">
                 <div className="space-y-2">
                   <label className="block text-sm font-medium text-foreground">
-                    Fiyat
+                    Dolar Fiyatı (USD)
                   </label>
                   <input
-                    type="text"
-                    value={formData.fiyat}
-                    onChange={(e) => setFormData(prev => ({ ...prev, fiyat: e.target.value }))}
-                    className="w-full px-4 py-3 rounded-xl bg-neutral-50 dark:bg-white/5 border border-neutral-200 dark:border-white/10 text-foreground placeholder:text-foreground-muted focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500/50 transition-all"
-                    placeholder="12.500 ₺"
+                    type="number"
+                    value={formData.fiyat_usd}
+                    onChange={(e) => {
+                      const usd = e.target.value;
+                      setFormData(prev => ({
+                        ...prev,
+                        fiyat_usd: usd,
+                        fiyat: usdToTry ? (usd ? (parseFloat(usd) * usdToTry).toFixed(2) : '') : prev.fiyat
+                      }));
+                    }}
+                    className="w-full px-4 py-3 rounded-xl bg-neutral-50 dark:bg-white/5 border border-neutral-200 dark:border-white/10 text-foreground placeholder:text-foreground-muted focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all"
+                    placeholder="500"
                   />
+                  {usdToTry && (
+                    <p className="text-xs text-foreground-muted">Güncel kur: 1 USD = {usdToTry.toFixed(2)} ₺</p>
+                  )}
+                  <div className="mt-2 text-green-700 dark:text-green-400 text-sm font-semibold">
+                    {formData.fiyat_usd && usdToTry ? `TL Fiyatı: ${(parseFloat(formData.fiyat_usd) * usdToTry).toLocaleString('tr-TR', {minimumFractionDigits:2})} ₺` : 'TL fiyatı otomatik hesaplanır'}
+                  </div>
                 </div>
                 <div className="space-y-2">
                   <label className="block text-sm font-medium text-foreground">
-                    Eski Fiyat
+                    Eski Fiyat (TL)
                   </label>
                   <input
                     type="text"

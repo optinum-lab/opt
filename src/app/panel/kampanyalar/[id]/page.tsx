@@ -24,6 +24,19 @@ interface Kampanya {
   link: string | null;
   sira: number;
   aktif: boolean;
+  fiyat_usd: string | null;
+  fiyat: string | null;
+  eski_fiyat: string | null;
+  badge: string | null;
+  renk: string | null;
+  ozellikler: string[] | null;
+  detay_baslik: string | null;
+  detay_aciklama: string | null;
+  detay_icerik: string | null;
+  paket_icerigi: string[] | null;
+  teknik_ozellikler: string[] | null;
+  avantajlar: string[] | null;
+  sss: { soru: string; cevap: string }[] | null;
   created_at: string;
   updated_at: string;
 }
