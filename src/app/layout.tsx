@@ -224,22 +224,22 @@ export const metadata: Metadata = {
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || 'hrZzcJR_U1ZjiSf0soDeQSdWLcKZei0SLBMzEu4gCAc',
   },
-  icons: {
-    icon: '/favicon.ico',
-    shortcut: '/favicon-16x16.png',
-    apple: '/apple-touch-icon.png',
+    icons: {
+    icon: 'https://res.cloudinary.com/dqmz7zz8m/image/upload/v1769105508/favicon/favicon/favicon.ico',
+    shortcut: 'https://res.cloudinary.com/dqmz7zz8m/image/upload/v1769105508/favicon/favicon/favicon-16x16.png',
+    apple: 'https://res.cloudinary.com/dqmz7zz8m/image/upload/v1769105510/favicon/favicon/apple-touch-icon.png',
     other: [
       {
         rel: 'icon',
         type: 'image/png',
         sizes: '192x192',
-        url: '/web-app-manifest-192x192.png',
+        url: 'https://res.cloudinary.com/dqmz7zz8m/image/upload/v1769105511/favicon/favicon/web-app-manifest-192x192.png',
       },
       {
         rel: 'icon',
         type: 'image/png',
         sizes: '512x512',
-        url: '/web-app-manifest-512x512.png',
+        url: 'https://res.cloudinary.com/dqmz7zz8m/image/upload/v1769105512/favicon/favicon/web-app-manifest-512x512.png',
       },
     ],
   },
