@@ -16,6 +16,8 @@ export interface KampanyaDetay {
   gorsel: string | null;
   icon: string | null;
   fiyat: string | null;
+  fiyat_usd: string | null;
+  eski_fiyat_usd: string | null;
   eski_fiyat: string | null;
   badge: string | null;
   renk: string | null;

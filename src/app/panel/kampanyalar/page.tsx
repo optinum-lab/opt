@@ -24,6 +24,11 @@ interface Kampanya {
   link: string | null;
   sira: number;
   aktif: boolean;
+  fiyat: string | null;
+  fiyat_usd: string | null;
+  eski_fiyat: string | null;
+  badge: string | null;
+  renk: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -98,14 +103,14 @@ export default async function KampanyalarPage() {
               key={kampanya.id}
               className="group relative p-4 rounded-2xl bg-white/80 dark:bg-white/5 backdrop-blur-xl border border-neutral-200 dark:border-white/10 hover:border-red-500/30 transition-all duration-300"
             >
-              <div className="flex items-center gap-4">
+              <div className="flex items-start gap-4">
                 {/* Sıra */}
                 <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-neutral-100 dark:bg-white/10 flex items-center justify-center text-sm font-medium text-foreground-secondary">
                   {index + 1}
                 </div>
 
                 {/* Görsel */}
-                <div className="relative flex-shrink-0 w-16 h-16 rounded-xl overflow-hidden bg-neutral-100 dark:bg-white/10">
+                <div className="relative flex-shrink-0 w-20 h-20 rounded-xl overflow-hidden bg-neutral-100 dark:bg-white/10 border border-neutral-200 dark:border-white/10">
                   {kampanya.gorsel ? (
                     <Image
                       src={kampanya.gorsel}
@@ -120,22 +125,69 @@ export default async function KampanyalarPage() {
                       </svg>
                     </div>
                   )}
+                  {/* Badge - eğer varsa */}
+                  {kampanya.badge && (
+                    <div className="absolute top-1 left-1 bg-red-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">
+                      {kampanya.badge}
+                    </div>
+                  )}
                 </div>
 
                 {/* Bilgiler */}
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold text-foreground truncate">{kampanya.baslik}</h3>
-                  <p className="text-sm text-foreground-secondary truncate">{kampanya.aciklama || 'Açıklama yok'}</p>
-                  <div className="flex items-center gap-3 mt-1">
-                    <span className="text-xs text-foreground-muted">/{kampanya.slug}</span>
-                    <span className={`text-xs px-2 py-0.5 rounded-full ${kampanya.aktif ? 'bg-green-500/10 text-green-500' : 'bg-neutral-500/10 text-neutral-500'}`}>
-                      {kampanya.aktif ? 'Aktif' : 'Pasif'}
+                  <div className="flex items-start justify-between gap-4 mb-2">
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-foreground truncate mb-1">{kampanya.baslik}</h3>
+                      {kampanya.aciklama && (
+                        <p className="text-sm text-foreground-secondary line-clamp-2">{kampanya.aciklama}</p>
+                      )}
+                    </div>
+                    {/* Fiyat */}
+                    <div className="flex-shrink-0 text-right">
+                      {kampanya.eski_fiyat && (
+                        <div className="text-xs text-foreground-muted line-through">{kampanya.eski_fiyat}</div>
+                      )}
+                      {kampanya.fiyat && (
+                        <div className="text-base font-bold text-red-500">{kampanya.fiyat}</div>
+                      )}
+                      {kampanya.fiyat_usd && (
+                        <div className="text-xs text-foreground-muted">${kampanya.fiyat_usd}</div>
+                      )}
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-3 flex-wrap">
+                    <span className="text-xs text-foreground-muted flex items-center gap-1">
+                      <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                      </svg>
+                      /{kampanya.slug}
+                    </span>
+                    {kampanya.renk && (
+                      <span className="text-xs px-2 py-0.5 rounded-full bg-neutral-100 dark:bg-white/10 text-foreground-muted flex items-center gap-1">
+                        <span className={`w-2 h-2 rounded-full bg-${kampanya.renk}-500`}></span>
+                        {kampanya.renk}
+                      </span>
+                    )}
+                    <span className={`text-xs px-2 py-0.5 rounded-full ${kampanya.aktif ? 'bg-green-500/10 text-green-600 dark:text-green-400' : 'bg-neutral-500/10 text-neutral-500'}`}>
+                      {kampanya.aktif ? '● Aktif' : '○ Pasif'}
                     </span>
                   </div>
                 </div>
 
                 {/* Aksiyonlar */}
-                <div className="flex items-center gap-2">
+                <div className="flex flex-col items-center gap-2">
+                  <Link
+                    href={`/montaj-kampanyalarimiz/${kampanya.slug}`}
+                    target="_blank"
+                    className="p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-white/10 text-foreground-secondary hover:text-foreground transition-colors"
+                    title="Önizle"
+                  >
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                  </Link>
                   <Link
                     href={`/panel/kampanyalar/${kampanya.id}`}
                     className="p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-white/10 text-foreground-secondary hover:text-foreground transition-colors"

@@ -134,6 +134,7 @@ export function KampanyaDetayClient({ kampanya }: Props) {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [isSticky, setIsSticky] = useState(false);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+  const [usdToTry, setUsdToTry] = useState<number | null>(null);
   const heroRef = useRef<HTMLDivElement>(null);
   
   const theme = colorThemes[kampanya.renk || "red"] || colorThemes.red;
@@ -141,6 +142,20 @@ export function KampanyaDetayClient({ kampanya }: Props) {
   const { scrollY } = useScroll();
   const backgroundY = useTransform(scrollY, [0, 500], [0, 150]);
   const opacity = useTransform(scrollY, [0, 300], [1, 0]);
+
+  // Exchange Rate Hook
+  useEffect(() => {
+    fetch('/api/exchange-rate')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && data.rate) {
+          setUsdToTry(data.rate);
+        }
+      })
+      .catch(() => {
+        setUsdToTry(34.50);
+      });
+  }, []);
 
   // Check sticky
   useEffect(() => {
@@ -213,12 +228,12 @@ export function KampanyaDetayClient({ kampanya }: Props) {
     `Merhaba, "${kampanya.baslik}" kampanyası hakkında bilgi almak istiyorum.`
   )}`;
 
-  // İndirim hesapla
+  // İndirim hesapla - USD bazlı
   const calculateDiscount = () => {
-    if (kampanya.eski_fiyat && kampanya.fiyat) {
-      const oldPrice = parseFloat(kampanya.eski_fiyat.replace(/[^0-9]/g, ""));
-      const newPrice = parseFloat(kampanya.fiyat.replace(/[^0-9]/g, ""));
-      if (oldPrice > 0 && newPrice > 0) {
+    if (kampanya.eski_fiyat_usd && kampanya.fiyat_usd) {
+      const oldPrice = parseFloat(kampanya.eski_fiyat_usd);
+      const newPrice = parseFloat(kampanya.fiyat_usd);
+      if (oldPrice > 0 && newPrice > 0 && oldPrice > newPrice) {
         return Math.round(((oldPrice - newPrice) / oldPrice) * 100);
       }
     }
@@ -226,6 +241,15 @@ export function KampanyaDetayClient({ kampanya }: Props) {
   };
 
   const discount = calculateDiscount();
+
+  // USD → TRY Çevirisi
+  const fiyatTRY = kampanya.fiyat_usd && usdToTry 
+    ? (parseFloat(kampanya.fiyat_usd) * usdToTry).toLocaleString('tr-TR', { maximumFractionDigits: 0 })
+    : null;
+    
+  const eskiFiyatTRY = kampanya.eski_fiyat_usd && usdToTry
+    ? (parseFloat(kampanya.eski_fiyat_usd) * usdToTry).toLocaleString('tr-TR', { maximumFractionDigits: 0 })
+    : null;
 
   return (
     <main className="min-h-screen bg-white dark:bg-neutral-950 overflow-x-hidden">
@@ -256,12 +280,21 @@ export function KampanyaDetayClient({ kampanya }: Props) {
                     <h2 className="font-semibold text-neutral-900 dark:text-white truncate text-sm md:text-base">
                       {kampanya.baslik}
                     </h2>
-                    {kampanya.fiyat && (
-                      <div 
-                        className="text-lg md:text-xl font-bold whitespace-nowrap"
-                        style={{ color: theme.primary }}
-                      >
-                        {kampanya.fiyat}
+                    {kampanya.fiyat_usd && fiyatTRY && (
+                      <div className="flex items-center gap-2">
+                        <div 
+                          className="text-base md:text-lg font-bold whitespace-nowrap"
+                          style={{ color: theme.primary }}
+                        >
+                          ${kampanya.fiyat_usd}
+                        </div>
+                        <span className="text-neutral-400 text-sm">/</span>
+                        <div 
+                          className="text-base md:text-lg font-bold whitespace-nowrap"
+                          style={{ color: theme.primary }}
+                        >
+                          {fiyatTRY} ₺
+                        </div>
                       </div>
                     )}
                   </div>
@@ -283,7 +316,7 @@ export function KampanyaDetayClient({ kampanya }: Props) {
       </AnimatePresence>
 
       {/* Hero Section */}
-      <section ref={heroRef} className="relative pt-24 md:pt-28 pb-16 md:pb-24 overflow-hidden">
+      <section ref={heroRef} className="relative pt-20 md:pt-24 lg:pt-28 pb-8 md:pb-16 lg:pb-24 overflow-hidden">
         {/* Animated Background */}
         <motion.div 
           style={{ y: backgroundY }}
@@ -295,7 +328,7 @@ export function KampanyaDetayClient({ kampanya }: Props) {
 
         <div className="container mx-auto px-4 relative">
           {/* Breadcrumb */}
-          <nav className="flex items-center gap-2 text-sm text-neutral-500 mb-8">
+          <nav className="flex items-center gap-2 text-xs md:text-sm text-neutral-500 mb-4 md:mb-8">
             <Link href="/" className="hover:text-neutral-900 dark:hover:text-white transition-colors">
               Ana Sayfa
             </Link>
@@ -307,7 +340,7 @@ export function KampanyaDetayClient({ kampanya }: Props) {
             <span className="text-neutral-900 dark:text-white truncate max-w-[200px]">{kampanya.baslik}</span>
           </nav>
 
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+          <div className="grid lg:grid-cols-2 gap-6 md:gap-12 lg:gap-16 items-start">
             {/* Left - Image */}
             <motion.div 
               initial={{ opacity: 0, scale: 0.95 }}
@@ -391,44 +424,72 @@ export function KampanyaDetayClient({ kampanya }: Props) {
               className="lg:sticky lg:top-32"
             >
               {/* Rating */}
-              <div className="flex items-center gap-2 mb-4">
+              <div className="flex items-center gap-2 mb-2 md:mb-4">
                 <div className="flex items-center gap-0.5 text-amber-400">
                   {[...Array(5)].map((_, i) => (
                     <StarIcon key={i} />
                   ))}
                 </div>
-                <span className="text-sm text-neutral-500">4.9 (127 değerlendirme)</span>
+                <span className="text-xs md:text-sm text-neutral-500">4.9 (127 değerlendirme)</span>
               </div>
 
               {/* Title */}
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-neutral-900 dark:text-white tracking-tight mb-4">
+              <h1 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-neutral-900 dark:text-white tracking-tight mb-2 md:mb-4">
                 {kampanya.detay_baslik || kampanya.baslik}
               </h1>
 
               {/* Description */}
-              <p className="text-lg text-neutral-600 dark:text-neutral-400 mb-8 leading-relaxed">
+              <p className="text-sm md:text-base lg:text-lg text-neutral-600 dark:text-neutral-400 mb-4 md:mb-8 leading-relaxed">
                 {kampanya.detay_aciklama || kampanya.aciklama}
               </p>
 
               {/* Price Card */}
               <div 
-                className="p-6 rounded-2xl border-2 bg-gradient-to-br from-neutral-50 to-white dark:from-neutral-900 dark:to-neutral-800 mb-8"
+                className="p-4 md:p-6 rounded-xl md:rounded-2xl border-2 bg-gradient-to-br from-neutral-50 to-white dark:from-neutral-900 dark:to-neutral-800 mb-6"
                 style={{ borderColor: theme.primary }}
               >
-                {/* Old Price */}
-                {kampanya.eski_fiyat && (
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="text-neutral-400 line-through text-lg">{kampanya.eski_fiyat}</span>
+                {/* Old Price - USD & TRY */}
+                {kampanya.eski_fiyat_usd && eskiFiyatTRY && (
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <span className="text-neutral-400 line-through text-sm">${kampanya.eski_fiyat_usd}</span>
+                      <span className="text-neutral-400 line-through text-sm">{eskiFiyatTRY} ₺</span>
+                    </div>
                     {discount > 0 && (
-                      <span className="text-sm font-medium text-green-600 dark:text-green-400">
+                      <span className="text-xs font-medium text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-950/30 px-2 py-1 rounded-full">
                         {discount}% tasarruf
                       </span>
                     )}
                   </div>
                 )}
                 
-                {/* Current Price */}
-                {kampanya.fiyat && (
+                {/* Current Price - USD & TRY */}
+                {kampanya.fiyat_usd && fiyatTRY ? (
+                  <div className="mb-3">
+                    <div className="text-xs text-neutral-500 mb-1">Kampanya Fiyatı</div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <div className="text-xs text-neutral-400 mb-0.5">USD</div>
+                        <div 
+                          className="text-2xl md:text-3xl font-bold"
+                          style={{ color: theme.primary }}
+                        >
+                          ${kampanya.fiyat_usd}
+                        </div>
+                      </div>
+                      <div>
+                        <div className="text-xs text-neutral-400 mb-0.5">TRY</div>
+                        <div 
+                          className="text-2xl md:text-3xl font-bold"
+                          style={{ color: theme.primary }}
+                        >
+                          {fiyatTRY} ₺
+                        </div>
+                      </div>
+                    </div>
+                    <p className="text-xs text-neutral-500 mt-1">* Montaj ve KDV Dahil</p>
+                  </div>
+                ) : kampanya.fiyat ? (
                   <div className="flex items-baseline gap-2 mb-4">
                     <span 
                       className="text-4xl md:text-5xl font-bold"
@@ -438,23 +499,24 @@ export function KampanyaDetayClient({ kampanya }: Props) {
                     </span>
                     <span className="text-neutral-500">/ montaj dahil</span>
                   </div>
-                )}
+                ) : null}
 
                 {/* CTA Buttons */}
-                <div className="space-y-3">
+                <div className="space-y-2">
                   <a
                     href={whatsappLink}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full text-white py-4 rounded-xl font-semibold text-lg flex items-center justify-center gap-3 hover:opacity-90 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+                    className="w-full text-white py-3 md:py-4 rounded-xl font-semibold text-base md:text-lg flex items-center justify-center gap-2 hover:opacity-90 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
                     style={{ backgroundColor: theme.primary }}
                   >
                     <WhatsAppIcon />
-                    WhatsApp ile Sipariş Ver
+                    <span className="hidden sm:inline">WhatsApp ile Sipariş Ver</span>
+                    <span className="sm:hidden">WhatsApp Sipariş</span>
                   </a>
                   <a
                     href="tel:+905454506587"
-                    className="w-full bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-white py-4 rounded-xl font-semibold text-lg flex items-center justify-center gap-3 hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-all"
+                    className="w-full bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-white py-3 md:py-4 rounded-xl font-semibold text-base md:text-lg flex items-center justify-center gap-2 hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-all"
                   >
                     <PhoneIcon />
                     0545 450 65 87
@@ -462,7 +524,7 @@ export function KampanyaDetayClient({ kampanya }: Props) {
                 </div>
 
                 {/* Mini Features */}
-                <div className="mt-6 pt-6 border-t border-neutral-200 dark:border-neutral-700 grid grid-cols-2 gap-4 text-sm">
+                <div className="mt-4 md:mt-6 pt-4 md:pt-6 border-t border-neutral-200 dark:border-neutral-700 grid grid-cols-2 gap-3 md:gap-4 text-xs md:text-sm">
                   <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400">
                     <CheckIcon />
                     <span>Ücretsiz Keşif</span>
@@ -500,16 +562,16 @@ export function KampanyaDetayClient({ kampanya }: Props) {
       </section>
 
       {/* Content Sections */}
-      <section className="py-16 md:py-24 bg-neutral-50 dark:bg-neutral-900/50">
+      <section className="py-8 md:py-16 lg:py-24 bg-neutral-50 dark:bg-neutral-900/50">
         <div className="container mx-auto px-4">
           {/* Section Tabs */}
-          <div className="flex justify-center mb-12 overflow-x-auto pb-4">
-            <div className="inline-flex items-center gap-2 p-1.5 rounded-2xl bg-white dark:bg-neutral-800 shadow-lg">
+          <div className="flex justify-center mb-6 md:mb-12 overflow-x-auto pb-4">
+            <div className="inline-flex items-center gap-1 md:gap-2 p-1 md:p-1.5 rounded-xl md:rounded-2xl bg-white dark:bg-neutral-800 shadow-lg">
               {sections.map((section) => (
                 <button
                   key={section.id}
                   onClick={() => setActiveSection(section.id)}
-                  className={`flex items-center gap-2 px-5 py-3 rounded-xl font-medium transition-all whitespace-nowrap ${
+                  className={`flex items-center gap-1.5 px-3 py-2 md:px-5 md:py-3 rounded-lg md:rounded-xl font-medium text-sm md:text-base transition-all whitespace-nowrap ${
                     activeSection === section.id
                       ? "text-white shadow-lg"
                       : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-700"

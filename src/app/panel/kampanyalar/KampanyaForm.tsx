@@ -82,9 +82,11 @@ interface Kampanya {
   link: string | null;
   sira: number;
   aktif: boolean;
-  // Yeni detay alanları
-  fiyat: string | null;
-  eski_fiyat: string | null;
+  // USD Bazlı Fiyatlandırma
+  fiyat_usd: string | null; // Ana fiyat (USD)
+  eski_fiyat_usd: string | null; // İndirimli fiyat (USD)
+  fiyat: string | null; // Deprecated - uyumluluk için
+  eski_fiyat: string | null; // Deprecated - uyumluluk için
   badge: string | null;
   renk: string | null;
   ozellikler: string[] | null;
@@ -140,42 +142,142 @@ export function KampanyaForm({ kampanya }: KampanyaFormProps) {
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'temel' | 'detay' | 'icerik'>('temel');
   
+  // Mevcut kampanyada paket içeriğinden otomatik özellikleri hesapla
+  const getAutoOzellikler = (paketIcerigiText: string) => {
+    if (!paketIcerigiText) return '';
+    const paketItems = paketIcerigiText
+      .split('\n')
+      .map(line => line.trim())
+      .filter(line => line.length > 0)
+      .slice(0, 4);
+    return paketItems.join('\n');
+  };
+
+  // Kısa açıklama oluştur - Paket içeriğinden ilk 2-3 öğeyi özetle
+  const getAutoAciklama = (paketIcerigiText: string, baslik: string) => {
+    if (!paketIcerigiText) {
+      // Paket içeriği yoksa başlıktan basit açıklama oluştur
+      return `${baslik} - Profesyonel montaj dahil, 2 yıl garantili`;
+    }
+    const paketItems = paketIcerigiText
+      .split('\n')
+      .map(line => line.trim())
+      .filter(line => line.length > 0)
+      .slice(0, 3); // İlk 3 öğe
+    
+    if (paketItems.length > 0) {
+      return paketItems.join(' • ') + ' • Montaj Dahil';
+    }
+    return `${baslik} - Profesyonel montaj dahil, 2 yıl garantili`;
+  };
+
+  const getInitialAciklama = () => {
+    if (kampanya?.aciklama) {
+      return kampanya.aciklama;
+    }
+    // Açıklama boşsa, paket içeriğinden oluştur
+    if (kampanya?.paket_icerigi && kampanya.paket_icerigi.length > 0) {
+      return getAutoAciklama(
+        kampanya.paket_icerigi.join('\n'), 
+        kampanya.baslik || ''
+      );
+    }
+    return '';
+  };
+
+  // Mevcut kampanyada boş alanları otomatik doldur
+  const getInitialOzellikler = () => {
+    if (kampanya?.ozellikler && kampanya.ozellikler.length > 0) {
+      return kampanya.ozellikler.join('\n');
+    }
+    // Özellikler boşsa, paket içeriğinden al
+    if (kampanya?.paket_icerigi && kampanya.paket_icerigi.length > 0) {
+      return getAutoOzellikler(kampanya.paket_icerigi.join('\n'));
+    }
+    return '';
+  };
+
+  const getInitialDetayAciklama = () => {
+    if (kampanya?.detay_aciklama) {
+      return kampanya.detay_aciklama;
+    }
+    // Detay açıklama boşsa, ana açıklamayı kullan
+    return kampanya?.aciklama || '';
+  };
+
   const [formData, setFormData] = useState({
     baslik: kampanya?.baslik || '',
     slug: kampanya?.slug || '',
-    aciklama: kampanya?.aciklama || '',
+    aciklama: getInitialAciklama(),
     gorsel: kampanya?.gorsel || '',
     icon: kampanya?.icon || '',
     link: kampanya?.link || '',
     sira: kampanya?.sira || 0,
     aktif: kampanya?.aktif ?? true,
-    // Yeni alanlar
-    fiyat: kampanya?.fiyat || '',
-    eski_fiyat: kampanya?.eski_fiyat || '',
+    // USD Bazlı Fiyatlandırma
+    fiyat_usd: kampanya?.fiyat_usd || '',
+    eski_fiyat_usd: kampanya?.eski_fiyat_usd || '',
     badge: kampanya?.badge || '',
     renk: kampanya?.renk || 'red',
-    ozellikler: (kampanya?.ozellikler || []).join('\n'),
+    ozellikler: getInitialOzellikler(),
     detay_baslik: kampanya?.detay_baslik || '',
-    detay_aciklama: kampanya?.detay_aciklama || '',
+    detay_aciklama: getInitialDetayAciklama(),
     detay_icerik: kampanya?.detay_icerik || '',
     paket_icerigi: (kampanya?.paket_icerigi || []).join('\n'),
     teknik_ozellikler: (kampanya?.teknik_ozellikler || []).join('\n'),
     avantajlar: (kampanya?.avantajlar || []).join('\n'),
     sss: kampanya?.sss || [],
-    fiyat_usd: kampanya?.fiyat_usd || '', // Dolar fiyatı
   });
 
-  // Kur state
+  // Paket içeriği değiştiğinde kart özelliklerini ve açıklamayı otomatik güncelle
+  useEffect(() => {
+    if (formData.paket_icerigi) {
+      const paketItems = formData.paket_icerigi
+        .split('\n')
+        .map(line => line.trim())
+        .filter(line => line.length > 0);
+      
+      // Kart özelliklerini güncelle (ilk 4 öğe)
+      const ozellikler = paketItems.slice(0, 4).join('\n');
+      
+      // Kısa açıklamayı güncelle (ilk 3 öğe)
+      const aciklama = paketItems.length > 0 
+        ? paketItems.slice(0, 3).join(' • ') + ' • Montaj Dahil'
+        : '';
+      
+      setFormData(prev => ({
+        ...prev,
+        ozellikler,
+        aciklama
+      }));
+    }
+  }, [formData.paket_icerigi]);
+
+  // Ana açıklama değiştiğinde detay açıklaması boşsa otomatik doldur
+  useEffect(() => {
+    if (formData.aciklama && !formData.detay_aciklama) {
+      setFormData(prev => ({
+        ...prev,
+        detay_aciklama: formData.aciklama
+      }));
+    }
+  }, [formData.aciklama, formData.detay_aciklama]);
+
+  // Kur state - Sadece önizleme için
   const [usdToTry, setUsdToTry] = useState<number | null>(null);
 
-  // Kur çekme
+  // Kur çekme - Exchange API ile fallback destekli
   useEffect(() => {
-    fetch('https://api.exchangerate.host/latest?base=USD&symbols=TRY')
+    fetch('/api/exchange-rate')
       .then(res => res.json())
       .then(data => {
-        if (data && data.rates && data.rates.TRY) {
-          setUsdToTry(data.rates.TRY);
+        if (data && data.rate) {
+          setUsdToTry(data.rate);
         }
+      })
+      .catch(() => {
+        // Fallback: manuel değer
+        setUsdToTry(34.50);
       });
   }, []);
 
@@ -218,9 +320,16 @@ export function KampanyaForm({ kampanya }: KampanyaFormProps) {
     try {
       const supabase = createClient();
       
-      // Satır başlarına göre array'e çevir
-      const parseLines = (text: string) => 
-        text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+      // Satır başlarına göre array'e çevir - boş array kontrolü
+      const parseLines = (text: string) => {
+        const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+        return lines.length > 0 ? lines : null;
+      };
+      
+      // SSS validation - boş veya geçersiz ise null
+      const validSss = Array.isArray(formData.sss) && formData.sss.length > 0 
+        ? formData.sss 
+        : null;
       
       const data = {
         baslik: formData.baslik,
@@ -229,12 +338,13 @@ export function KampanyaForm({ kampanya }: KampanyaFormProps) {
         gorsel: formData.gorsel || null,
         icon: formData.icon || null,
         link: formData.link || null,
-        sira: formData.sira,
-        aktif: formData.aktif,
-        // Yeni alanlar
-        fiyat: formData.fiyat || null,
+        sira: Number(formData.sira) || 0,
+        aktif: Boolean(formData.aktif),
+        // USD Bazlı Fiyatlandırma
         fiyat_usd: formData.fiyat_usd || null,
-        eski_fiyat: formData.eski_fiyat || null,
+        eski_fiyat_usd: formData.eski_fiyat_usd || null,
+        fiyat: null, // Deprecated
+        eski_fiyat: null, // Deprecated
         badge: formData.badge || null,
         renk: formData.renk || null,
         ozellikler: parseLines(formData.ozellikler),
@@ -244,31 +354,56 @@ export function KampanyaForm({ kampanya }: KampanyaFormProps) {
         paket_icerigi: parseLines(formData.paket_icerigi),
         teknik_ozellikler: parseLines(formData.teknik_ozellikler),
         avantajlar: parseLines(formData.avantajlar),
-        sss: formData.sss,
+        sss: validSss,
         updated_at: new Date().toISOString(),
       };
       
+      console.log('📤 Gönderilen data:', JSON.stringify(data, null, 2));
+      
       if (kampanya) {
         // Güncelle
-        const { error } = await supabase
+        const { data: result, error } = await supabase
           .from('kampanyalar')
           .update(data as never)
-          .eq('id', kampanya.id);
+          .eq('id', kampanya.id)
+          .select();
 
-        if (error) throw error;
+        if (error) {
+          console.error('❌ Supabase update hatası:', {
+            message: error.message,
+            details: error.details,
+            hint: error.hint,
+            code: error.code
+          });
+          throw new Error(error.message || 'Güncelleme başarısız');
+        }
+        console.log('✅ Kampanya başarıyla güncellendi:', result);
       } else {
         // Yeni ekle
-        const { error } = await supabase
+        const { data: result, error } = await supabase
           .from('kampanyalar')
-          .insert(data as never);
+          .insert(data as never)
+          .select();
 
-        if (error) throw error;
+        if (error) {
+          console.error('❌ Supabase insert hatası:', {
+            message: error.message,
+            details: error.details,
+            hint: error.hint,
+            code: error.code
+          });
+          throw new Error(error.message || 'Ekleme başarısız');
+        }
+        console.log('✅ Kampanya başarıyla eklendi:', result);
       }
 
       router.push('/panel/kampanyalar');
       router.refresh();
     } catch (err: unknown) {
-      console.error('Form hatası:', err);
+      console.error('❌ Form hatası:', err);
+      if (err && typeof err === 'object') {
+        console.error('Hata detayı:', JSON.stringify(err, null, 2));
+      }
       const errorMessage = err instanceof Error ? err.message : 'Bir hata oluştu';
       setError(errorMessage);
     } finally {
@@ -373,58 +508,92 @@ export function KampanyaForm({ kampanya }: KampanyaFormProps) {
                 </p>
               </div>
 
-              {/* Açıklama */}
+              {/* Açıklama - Otomatik */}
               <div className="space-y-2 mb-4">
                 <label className="block text-sm font-medium text-foreground">
                   Kısa Açıklama
                 </label>
+                <p className="text-xs text-foreground-muted mb-2">
+                  ✨ Otomatik doldurulur: Paket İçeriği&apos;nden ilk 3 öğe alınır (isterseniz değiştirebilirsiniz)
+                </p>
                 <textarea
                   value={formData.aciklama}
                   onChange={(e) => setFormData(prev => ({ ...prev, aciklama: e.target.value }))}
                   rows={2}
                   className="w-full px-4 py-3 rounded-xl bg-neutral-50 dark:bg-white/5 border border-neutral-200 dark:border-white/10 text-foreground placeholder:text-foreground-muted focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500/50 transition-all resize-none"
-                  placeholder="Kart üzerinde görünecek kısa açıklama"
+                  placeholder="Paket İçeriği bölümünü doldurduğunuzda burası otomatik güncellenecek..."
                 />
               </div>
 
-              {/* Dolar Fiyatı, TL Fiyatı ve Eski Fiyat */}
+              {/* USD Fiyatlandırma - Ana Fiyat ve İndirimli Fiyat */}
+              <div className="p-4 rounded-xl bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 mb-4">
+                <div className="flex items-center gap-2 mb-3">
+                  <svg className="w-5 h-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span className="text-sm font-semibold text-blue-900 dark:text-blue-100">Fiyatlar USD olarak girilir, ön yüzde otomatik TRY'ye çevrilir</span>
+                </div>
+                {usdToTry && (
+                  <p className="text-xs text-blue-700 dark:text-blue-300">💱 Güncel kur: 1 USD = {usdToTry.toFixed(2)} ₺</p>
+                )}
+              </div>
+
               <div className="grid grid-cols-2 gap-4 mb-4">
                 <div className="space-y-2">
                   <label className="block text-sm font-medium text-foreground">
-                    Dolar Fiyatı (USD)
+                    İndirimli Fiyat (USD) <span className="text-red-500">*</span>
+                    <span className="text-xs font-normal text-foreground-muted ml-2">(Güncel kampanya fiyatı)</span>
                   </label>
-                  <input
-                    type="number"
-                    value={formData.fiyat_usd}
-                    onChange={(e) => {
-                      const usd = e.target.value;
-                      setFormData(prev => ({
-                        ...prev,
-                        fiyat_usd: usd,
-                        fiyat: usdToTry ? (usd ? (parseFloat(usd) * usdToTry).toFixed(2) : '') : prev.fiyat
-                      }));
-                    }}
-                    className="w-full px-4 py-3 rounded-xl bg-neutral-50 dark:bg-white/5 border border-neutral-200 dark:border-white/10 text-foreground placeholder:text-foreground-muted focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all"
-                    placeholder="500"
-                  />
-                  {usdToTry && (
-                    <p className="text-xs text-foreground-muted">Güncel kur: 1 USD = {usdToTry.toFixed(2)} ₺</p>
-                  )}
-                  <div className="mt-2 text-green-700 dark:text-green-400 text-sm font-semibold">
-                    {formData.fiyat_usd && usdToTry ? `TL Fiyatı: ${(parseFloat(formData.fiyat_usd) * usdToTry).toLocaleString('tr-TR', {minimumFractionDigits:2})} ₺` : 'TL fiyatı otomatik hesaplanır'}
+                  <div className="relative">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-foreground-muted">$</span>
+                    <input
+                      type="number"
+                      step="0.01"
+                      value={formData.fiyat_usd}
+                      onChange={(e) => setFormData(prev => ({ ...prev, fiyat_usd: e.target.value }))}
+                      className="w-full pl-8 pr-4 py-3 rounded-xl bg-neutral-50 dark:bg-white/5 border border-neutral-200 dark:border-white/10 text-foreground placeholder:text-foreground-muted focus:outline-none focus:ring-2 focus:ring-green-500/50 focus:border-green-500/50 transition-all"
+                      placeholder="310.00"
+                      required
+                    />
                   </div>
+                  {formData.fiyat_usd && usdToTry && (
+                    <div className="text-sm">
+                      <span className="text-foreground-muted">≈ </span>
+                      <span className="font-bold text-green-600 dark:text-green-400">
+                        {(parseFloat(formData.fiyat_usd) * usdToTry).toLocaleString('tr-TR', {maximumFractionDigits:0})} ₺
+                      </span>
+                    </div>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <label className="block text-sm font-medium text-foreground">
-                    Eski Fiyat (TL)
+                    Eski Fiyat (USD)
+                    <span className="text-xs font-normal text-foreground-muted ml-2">(İndirim göstermek için)</span>
                   </label>
-                  <input
-                    type="text"
-                    value={formData.eski_fiyat}
-                    onChange={(e) => setFormData(prev => ({ ...prev, eski_fiyat: e.target.value }))}
-                    className="w-full px-4 py-3 rounded-xl bg-neutral-50 dark:bg-white/5 border border-neutral-200 dark:border-white/10 text-foreground placeholder:text-foreground-muted focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500/50 transition-all"
-                    placeholder="15.000 ₺"
-                  />
+                  <div className="relative">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-foreground-muted">$</span>
+                    <input
+                      type="number"
+                      step="0.01"
+                      value={formData.eski_fiyat_usd}
+                      onChange={(e) => setFormData(prev => ({ ...prev, eski_fiyat_usd: e.target.value }))}
+                      className="w-full pl-8 pr-4 py-3 rounded-xl bg-neutral-50 dark:bg-white/5 border border-neutral-200 dark:border-white/10 text-foreground placeholder:text-foreground-muted focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500/50 transition-all"
+                      placeholder="370.00"
+                    />
+                  </div>
+                  {formData.eski_fiyat_usd && usdToTry && (
+                    <div className="text-sm">
+                      <span className="text-foreground-muted">≈ </span>
+                      <span className="font-bold text-red-600 dark:text-red-400 line-through">
+                        {(parseFloat(formData.eski_fiyat_usd) * usdToTry).toLocaleString('tr-TR', {maximumFractionDigits:0})} ₺
+                      </span>
+                    </div>
+                  )}
+                  {formData.fiyat_usd && formData.eski_fiyat_usd && parseFloat(formData.eski_fiyat_usd) > parseFloat(formData.fiyat_usd) && (
+                    <div className="text-xs font-bold text-green-600 dark:text-green-400">
+                      🎉 %{Math.round(((parseFloat(formData.eski_fiyat_usd) - parseFloat(formData.fiyat_usd)) / parseFloat(formData.eski_fiyat_usd)) * 100)} indirim
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -587,16 +756,18 @@ export function KampanyaForm({ kampanya }: KampanyaFormProps) {
               </div>
             </div>
 
-            {/* Kart Özellikleri */}
+            {/* Kart Özellikleri - Otomatik */}
             <div className="p-6 rounded-2xl bg-white/80 dark:bg-white/5 backdrop-blur-xl border border-neutral-200 dark:border-white/10">
               <h2 className="text-lg font-semibold text-foreground mb-4">Kart Özellikleri</h2>
-              <p className="text-xs text-foreground-muted mb-3">Kampanya kartında gösterilecek özellikler (her satıra bir tane)</p>
+              <p className="text-xs text-foreground-muted mb-3">
+                ✨ Otomatik doldurulur: Paket İçeriği&apos;nden ilk 4 öğe alınır
+              </p>
               <textarea
                 value={formData.ozellikler}
-                onChange={(e) => setFormData(prev => ({ ...prev, ozellikler: e.target.value }))}
+                readOnly
                 rows={4}
-                className="w-full px-4 py-3 rounded-xl bg-neutral-50 dark:bg-white/5 border border-neutral-200 dark:border-white/10 text-foreground placeholder:text-foreground-muted focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500/50 transition-all resize-none text-sm"
-                placeholder="4 Adet 2MP Kamera&#10;4 Kanal Kayıt Cihazı&#10;500GB HDD&#10;Montaj Dahil"
+                className="w-full px-4 py-3 rounded-xl bg-neutral-100 dark:bg-neutral-800/50 border border-neutral-300 dark:border-neutral-700 text-foreground/70 cursor-not-allowed resize-none text-sm"
+                placeholder="Paket İçeriği bölümünü doldurduğunuzda burası otomatik güncellenecek..."
               />
             </div>
           </div>
@@ -623,17 +794,20 @@ export function KampanyaForm({ kampanya }: KampanyaFormProps) {
               />
             </div>
 
-            {/* Detay Açıklama */}
+            {/* Detay Açıklama - Otomatik */}
             <div className="space-y-2 mb-4">
               <label className="block text-sm font-medium text-foreground">
                 Detay Sayfası Açıklaması
               </label>
+              <p className="text-xs text-foreground-muted mb-2">
+                ✨ Otomatik doldurulur: Kısa Açıklama alanından alınır (isterseniz değiştirebilirsiniz)
+              </p>
               <textarea
                 value={formData.detay_aciklama}
                 onChange={(e) => setFormData(prev => ({ ...prev, detay_aciklama: e.target.value }))}
                 rows={3}
                 className="w-full px-4 py-3 rounded-xl bg-neutral-50 dark:bg-white/5 border border-neutral-200 dark:border-white/10 text-foreground placeholder:text-foreground-muted focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500/50 transition-all resize-none"
-                placeholder="Detay sayfasında gösterilecek uzun açıklama"
+                placeholder="Kısa Açıklama alanını doldurduğunuzda burası otomatik güncellenecek..."
               />
             </div>
 

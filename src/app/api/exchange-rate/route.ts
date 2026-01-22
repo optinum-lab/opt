@@ -1,48 +1,85 @@
 /**
- * Döviz Kuru API Route
- * GenelPara API -> Supabase
+ * USD/TRY Exchange Rate API
+ * Multi-source strategy: fawazahmed0 currency API with fallback
  */
 
 import { NextResponse } from 'next/server';
-import { getUSDRate, updateExchangeRate } from '@/lib/currency';
 
-export const dynamic = 'force-dynamic';
+// ISR: 5 dakikada bir yeniden doğrula
+export const revalidate = 300;
+
+// Exchange API - Multi-source fallback strategy
+const EXCHANGE_SOURCES = [
+  {
+    name: 'fawazahmed0-cdn',
+    url: 'https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.json',
+    parse: (data: any) => data?.usd?.try,
+  },
+  {
+    name: 'fawazahmed0-pages',
+    url: 'https://latest.currency-api.pages.dev/v1/currencies/usd.json',
+    parse: (data: any) => data?.usd?.try,
+  },
+  {
+    name: 'fawazahmed0-dated',
+    url: () => {
+      const date = new Date();
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@${year}-${month}-${day}/v1/currencies/usd.json`;
+    },
+    parse: (data: any) => data?.usd?.try,
+  },
+];
+
+const FALLBACK_RATE = 34.50; // Manuel fallback
 
 export async function GET() {
   try {
-    const rateData = await getUSDRate();
-    
-    return NextResponse.json({
-      rate: rateData.usd.satis,
-      alis: rateData.usd.alis,
-      satis: rateData.usd.satis,
-      degisim: rateData.usd.degisim,
-      lastUpdate: rateData.lastUpdate,
-    });
-  } catch (error) {
-    console.error('Exchange rate API error:', error);
-    return NextResponse.json(
-      { error: 'Döviz kuru alınamadı', rate: 34.50 },
-      { status: 500 }
-    );
-  }
-}
+    // Multi-source fallback strategy
+    for (const source of EXCHANGE_SOURCES) {
+      try {
+        const url = typeof source.url === 'function' ? source.url() : source.url;
+        const response = await fetch(url, {
+          next: { revalidate: 300 }, // 5 dakika cache
+        });
 
-// Manuel güncelleme için POST endpoint
-export async function POST() {
-  try {
-    const rateData = await updateExchangeRate();
-    
+        if (response.ok) {
+          const data = await response.json();
+          const rate = source.parse(data);
+
+          if (rate && typeof rate === 'number' && rate > 0) {
+            console.log(`✅ Exchange rate fetched from ${source.name}: ${rate}`);
+            return NextResponse.json({
+              rate,
+              source: source.name,
+              timestamp: new Date().toISOString(),
+            });
+          }
+        }
+      } catch (error) {
+        console.warn(`⚠️ ${source.name} failed, trying next source...`);
+        continue;
+      }
+    }
+
+    // Tüm kaynaklar başarısız, fallback kullan
+    console.warn('⚠️ All exchange sources failed, using fallback rate');
     return NextResponse.json({
-      success: true,
-      rate: rateData.usd.satis,
-      lastUpdate: rateData.lastUpdate,
+      rate: FALLBACK_RATE,
+      source: 'fallback',
+      timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error('Exchange rate update error:', error);
+    console.error('❌ Exchange rate API error:', error);
     return NextResponse.json(
-      { error: 'Güncelleme başarısız' },
-      { status: 500 }
+      {
+        rate: FALLBACK_RATE,
+        source: 'fallback-error',
+        timestamp: new Date().toISOString(),
+      },
+      { status: 200 } // 200 döndür ki frontend çalışmaya devam etsin
     );
   }
 }

@@ -123,58 +123,69 @@ export default async function KampanyalarimizPage() {
     : DEFAULT_KAMPANYALAR;
 
   return (
-    <main className="min-h-screen bg-background pt-24 md:pt-28 lg:pt-32">
-      {/* Hero Section - Eye-catching */}
-      <section className="relative py-16 md:py-24 overflow-hidden">
+    <main className="min-h-screen bg-background pt-20 md:pt-24">
+      {/* Hero Section - Kompakt */}
+      <section className="relative py-12 md:py-16 overflow-hidden">
         {/* Background gradient */}
         <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 via-transparent to-blue-500/5" />
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-red-500/10 rounded-full blur-3xl" />
+        
+        {/* Üst geçiş - fade in */}
+        <div className="absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-background to-transparent pointer-events-none" />
+        
+        {/* Alt geçiş - fade out */}
+        <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-background to-transparent pointer-events-none" />
         
         <div className="container mx-auto px-4 relative">
           <div className="max-w-3xl mx-auto text-center">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 bg-red-500/10 text-red-600 dark:text-red-400 px-4 py-2 rounded-full text-sm font-medium mb-6">
-              <span className="relative flex h-2 w-2">
+            <div className="inline-flex items-center gap-2 bg-red-500/10 text-red-600 dark:text-red-400 px-3 py-1.5 rounded-full text-xs font-semibold mb-4">
+              <span className="relative flex h-1.5 w-1.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-red-500"></span>
               </span>
               Sınırlı Süreli Kampanyalar
             </div>
             
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-neutral-900 dark:text-white tracking-tight">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-neutral-900 dark:text-white tracking-tight">
               Montaj <span className="text-red-500">Kampanyalarımız</span>
             </h1>
-            <p className="mt-6 text-lg md:text-xl text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto">
+            <p className="mt-4 text-base md:text-lg text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto">
               Profesyonel kurulum dahil güvenlik kamera paketleri. 
-              <span className="text-red-500 font-semibold">Ücretsiz keşif</span> ve 
+              <span className="text-red-500 font-semibold"> Ücretsiz keşif</span> ve 
               <span className="text-red-500 font-semibold"> 2 yıl garanti</span> avantajıyla.
             </p>
             
-            {/* Trust badges */}
-            <div className="flex flex-wrap items-center justify-center gap-6 mt-8">
-              <div className="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400">
-                <svg className="w-5 h-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            {/* Trust badges - Kompakt */}
+            <div className="flex flex-wrap items-center justify-center gap-4 mt-6">
+              <div className="flex items-center gap-1.5 text-xs text-neutral-600 dark:text-neutral-400">
+                <svg className="w-4 h-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                 </svg>
                 Ücretsiz Keşif
               </div>
-              <div className="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400">
-                <svg className="w-5 h-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              <div className="flex items-center gap-1.5 text-xs text-neutral-600 dark:text-neutral-400">
+                <svg className="w-4 h-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                 </svg>
                 2 Yıl Garanti
               </div>
-              <div className="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400">
-                <svg className="w-5 h-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              <div className="flex items-center gap-1.5 text-xs text-neutral-600 dark:text-neutral-400">
+                <svg className="w-4 h-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                 </svg>
                 7/24 Destek
               </div>
-              <div className="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400">
-                <svg className="w-5 h-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              <div className="flex items-center gap-1.5 text-xs text-neutral-600 dark:text-neutral-400">
+                <svg className="w-4 h-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                 </svg>
                 Montaj Dahil
+              </div>
+              <div className="flex items-center gap-1.5 text-xs text-neutral-600 dark:text-neutral-400">
+                <svg className="w-4 h-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+                KDV Dahil
               </div>
             </div>
           </div>
