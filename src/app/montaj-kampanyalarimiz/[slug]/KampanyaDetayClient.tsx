@@ -251,6 +251,22 @@ export function KampanyaDetayClient({ kampanya }: Props) {
     ? (parseFloat(kampanya.eski_fiyat_usd) * usdToTry).toLocaleString('tr-TR', { maximumFractionDigits: 0 })
     : null;
 
+  // Paylaşım fonksiyonu
+  const handleShare = async () => {
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: kampanya.baslik,
+          text: kampanya.detay_aciklama || kampanya.aciklama || kampanya.baslik,
+          url: typeof window !== 'undefined' ? window.location.href : undefined,
+        });
+      } else if (navigator.clipboard) {
+        await navigator.clipboard.writeText(window.location.href);
+        alert('Bağlantı panoya kopyalandı');
+      }
+    } catch {}
+  };
+
   return (
     <main className="min-h-screen bg-white dark:bg-neutral-950 overflow-x-hidden">
       {/* Sticky Header - Price Card */}
@@ -316,14 +332,15 @@ export function KampanyaDetayClient({ kampanya }: Props) {
       </AnimatePresence>
 
       {/* Hero Section */}
-      <section ref={heroRef} className="relative pt-20 md:pt-24 lg:pt-28 pb-8 md:pb-16 lg:pb-24 overflow-hidden">
-        {/* Animated Background */}
+      <section ref={heroRef} className="relative pt-20 md:pt-24 lg:pt-28 pb-8 md:pb-16 lg:pb-24 overflow-hidden bg-gradient-to-b from-neutral-50/50 via-white to-white dark:from-neutral-950 dark:via-neutral-950 dark:to-neutral-900">
+        {/* Enhanced Animated Background with Glass Effects */}
         <motion.div 
           style={{ y: backgroundY }}
           className="absolute inset-0 pointer-events-none"
         >
-          <div className={`absolute top-0 left-1/4 w-[600px] h-[600px] bg-gradient-to-br ${theme.gradient} opacity-[0.03] rounded-full blur-3xl`} />
-          <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-gradient-to-br from-purple-500 to-pink-500 opacity-[0.03] rounded-full blur-3xl" />
+          <div className={`absolute top-0 left-1/4 w-[600px] h-[600px] bg-gradient-to-br ${theme.gradient} opacity-[0.08] rounded-full blur-3xl`} />
+          <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-gradient-to-br from-purple-500 to-pink-500 opacity-[0.06] rounded-full blur-3xl" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-white/10 dark:bg-white/5 rounded-full blur-3xl" />
         </motion.div>
 
         <div className="container mx-auto px-4 relative">
@@ -437,109 +454,142 @@ export function KampanyaDetayClient({ kampanya }: Props) {
               <h1 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-neutral-900 dark:text-white tracking-tight mb-2 md:mb-4">
                 {kampanya.detay_baslik || kampanya.baslik}
               </h1>
+              {/* Quick Actions - Glass Style */}
+              <div className="flex items-center gap-3 mb-6">
+                <button
+                  onClick={handleShare}
+                  className="group inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-white/80 dark:bg-neutral-800/80 backdrop-blur-sm text-neutral-700 dark:text-neutral-200 text-sm hover:bg-neutral-100/80 dark:hover:bg-neutral-700/80 transition-all duration-300 border border-neutral-200/50 dark:border-neutral-700/50 shadow-sm hover:shadow-md"
+                >
+                  <svg className="w-4 h-4 group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 12v.01M12 4v.01M20 12v.01M12 20v.01M7 12h10M12 7v10" />
+                  </svg>
+                  Paylaş
+                </button>
+                <a
+                  href={whatsappLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group inline-flex items-center gap-2 px-3 py-2 rounded-lg text-white text-sm hover:opacity-90 transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5"
+                  style={{ backgroundColor: theme.primary }}
+                >
+                  <WhatsAppIcon />
+                  Teklif Al
+                </a>
+              </div>
 
               {/* Description */}
               <p className="text-sm md:text-base lg:text-lg text-neutral-600 dark:text-neutral-400 mb-4 md:mb-8 leading-relaxed">
                 {kampanya.detay_aciklama || kampanya.aciklama}
               </p>
 
-              {/* Price Card */}
+              {/* Price Card - Premium Glass Design */}
               <div 
-                className="p-4 md:p-6 rounded-xl md:rounded-2xl border-2 bg-gradient-to-br from-neutral-50 to-white dark:from-neutral-900 dark:to-neutral-800 mb-6"
+                className="group relative p-4 md:p-6 rounded-2xl border-2 bg-white/80 dark:bg-neutral-800/80 backdrop-blur-sm mb-6 shadow-sm hover:shadow-[0_20px_60px_rgba(0,0,0,0.15)] dark:hover:shadow-[0_20px_60px_rgba(0,0,0,0.4)] transition-all duration-700 overflow-hidden"
                 style={{ borderColor: theme.primary }}
               >
-                {/* Old Price - USD & TRY */}
-                {kampanya.eski_fiyat_usd && eskiFiyatTRY && (
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-2">
-                      <span className="text-neutral-400 line-through text-sm">${kampanya.eski_fiyat_usd}</span>
-                      <span className="text-neutral-400 line-through text-sm">{eskiFiyatTRY} ₺</span>
-                    </div>
-                    {discount > 0 && (
-                      <span className="text-xs font-medium text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-950/30 px-2 py-1 rounded-full">
-                        {discount}% tasarruf
-                      </span>
-                    )}
-                  </div>
-                )}
+                {/* Hover glow background */}
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 bg-gradient-to-br from-white/30 via-white/10 to-transparent dark:from-white/10 dark:via-white/5 pointer-events-none rounded-2xl" />
                 
-                {/* Current Price - USD & TRY */}
-                {kampanya.fiyat_usd && fiyatTRY ? (
-                  <div className="mb-3">
-                    <div className="text-xs text-neutral-500 mb-1">Kampanya Fiyatı</div>
-                    <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <div className="text-xs text-neutral-400 mb-0.5">USD</div>
-                        <div 
-                          className="text-2xl md:text-3xl font-bold"
-                          style={{ color: theme.primary }}
-                        >
-                          ${kampanya.fiyat_usd}
+                {/* Top highlight */}
+                <div className="absolute -top-24 left-1/2 h-48 w-48 -translate-x-1/2 rounded-full bg-white/20 dark:bg-white/10 blur-3xl opacity-0 group-hover:opacity-100 group-hover:scale-125 transition-all duration-700" />
+
+                <div className="relative z-10">
+                  {/* Old Price - USD & TRY */}
+                  {kampanya.eski_fiyat_usd && eskiFiyatTRY && (
+                    <div className="flex items-center justify-between mb-3 pb-3 border-b border-neutral-200/50 dark:border-neutral-700/50">
+                      <div className="flex items-center gap-3">
+                        <span className="text-neutral-400 line-through text-sm">${kampanya.eski_fiyat_usd}</span>
+                        <span className="text-neutral-400 line-through text-sm">{eskiFiyatTRY} ₺</span>
+                      </div>
+                      {discount > 0 && (
+                        <span className="text-xs font-bold text-white bg-gradient-to-r from-green-500 to-emerald-600 px-3 py-1 rounded-full shadow-lg">
+                          {discount}% TASARRUF
+                        </span>
+                      )}
+                    </div>
+                  )}
+                  
+                  {/* Current Price - USD & TRY */}
+                  {kampanya.fiyat_usd && fiyatTRY ? (
+                    <div className="mb-6">
+                      <div className="text-xs text-neutral-500 mb-2 uppercase tracking-wide font-semibold">Kampanya Fiyatı</div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="p-4 rounded-xl bg-neutral-50/50 dark:bg-neutral-900/50 border border-neutral-200/30 dark:border-neutral-700/30">
+                          <div className="text-xs text-neutral-400 mb-1 uppercase tracking-wider font-semibold">USD</div>
+                          <div 
+                            className="text-2xl md:text-3xl font-bold"
+                            style={{ color: theme.primary }}
+                          >
+                            ${kampanya.fiyat_usd}
+                          </div>
+                        </div>
+                        <div className="p-4 rounded-xl bg-neutral-50/50 dark:bg-neutral-900/50 border border-neutral-200/30 dark:border-neutral-700/30">
+                          <div className="text-xs text-neutral-400 mb-1 uppercase tracking-wider font-semibold">TRY</div>
+                          <div 
+                            className="text-2xl md:text-3xl font-bold"
+                            style={{ color: theme.primary }}
+                          >
+                            {fiyatTRY} ₺
+                          </div>
                         </div>
                       </div>
-                      <div>
-                        <div className="text-xs text-neutral-400 mb-0.5">TRY</div>
-                        <div 
-                          className="text-2xl md:text-3xl font-bold"
+                      <p className="text-xs text-neutral-500 mt-3 italic">* Kurulum ve KDV Dahil</p>
+                    </div>
+                  ) : kampanya.fiyat ? (
+                    <div className="mb-6">
+                      <div className="text-xs text-neutral-500 mb-2 uppercase tracking-wide font-semibold">Fiyat</div>
+                      <div className="flex items-baseline gap-2">
+                        <span 
+                          className="text-4xl md:text-5xl font-bold"
                           style={{ color: theme.primary }}
                         >
-                          {fiyatTRY} ₺
-                        </div>
+                          {kampanya.fiyat}
+                        </span>
+                        <span className="text-neutral-500">/ montaj dahil</span>
                       </div>
                     </div>
-                    <p className="text-xs text-neutral-500 mt-1">* Montaj ve KDV Dahil</p>
-                  </div>
-                ) : kampanya.fiyat ? (
-                  <div className="flex items-baseline gap-2 mb-4">
-                    <span 
-                      className="text-4xl md:text-5xl font-bold"
-                      style={{ color: theme.primary }}
+                  ) : null}
+
+                  {/* CTA Buttons */}
+                  <div className="space-y-3">
+                    <a
+                      href={whatsappLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full text-white py-3 md:py-4 rounded-xl font-semibold text-base md:text-lg flex items-center justify-center gap-2 hover:opacity-90 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1 active:translate-y-0 group/btn"
+                      style={{ backgroundColor: theme.primary }}
                     >
-                      {kampanya.fiyat}
-                    </span>
-                    <span className="text-neutral-500">/ montaj dahil</span>
+                      <WhatsAppIcon />
+                      <span className="hidden sm:inline">WhatsApp ile Sipariş Ver</span>
+                      <span className="sm:hidden">WhatsApp Sipariş</span>
+                    </a>
+                    <a
+                      href="tel:+905454506587"
+                      className="w-full bg-neutral-100/80 dark:bg-neutral-700/80 backdrop-blur-sm text-neutral-900 dark:text-white py-3 md:py-4 rounded-xl font-semibold text-base md:text-lg flex items-center justify-center gap-2 hover:bg-neutral-200/80 dark:hover:bg-neutral-600/80 transition-all duration-300 border border-neutral-200/50 dark:border-neutral-600/50 shadow-sm hover:shadow-md"
+                    >
+                      <PhoneIcon />
+                      0545 450 65 87
+                    </a>
                   </div>
-                ) : null}
 
-                {/* CTA Buttons */}
-                <div className="space-y-2">
-                  <a
-                    href={whatsappLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full text-white py-3 md:py-4 rounded-xl font-semibold text-base md:text-lg flex items-center justify-center gap-2 hover:opacity-90 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
-                    style={{ backgroundColor: theme.primary }}
-                  >
-                    <WhatsAppIcon />
-                    <span className="hidden sm:inline">WhatsApp ile Sipariş Ver</span>
-                    <span className="sm:hidden">WhatsApp Sipariş</span>
-                  </a>
-                  <a
-                    href="tel:+905454506587"
-                    className="w-full bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-white py-3 md:py-4 rounded-xl font-semibold text-base md:text-lg flex items-center justify-center gap-2 hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-all"
-                  >
-                    <PhoneIcon />
-                    0545 450 65 87
-                  </a>
-                </div>
-
-                {/* Mini Features */}
-                <div className="mt-4 md:mt-6 pt-4 md:pt-6 border-t border-neutral-200 dark:border-neutral-700 grid grid-cols-2 gap-3 md:gap-4 text-xs md:text-sm">
-                  <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400">
-                    <CheckIcon />
-                    <span>Ücretsiz Keşif</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400">
-                    <CheckIcon />
-                    <span>2 Yıl Garanti</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400">
-                    <CheckIcon />
-                    <span>Profesyonel Montaj</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400">
-                    <CheckIcon />
-                    <span>7/24 Destek</span>
+                  {/* Mini Features */}
+                  <div className="mt-6 pt-6 border-t border-neutral-200/50 dark:border-neutral-700/50 grid grid-cols-2 gap-3 md:gap-4 text-xs md:text-sm">
+                    <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors">
+                      <CheckIcon />
+                      <span>Ücretsiz Keşif</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors">
+                      <CheckIcon />
+                      <span>2 Yıl Garanti</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors">
+                      <CheckIcon />
+                      <span>Profesyonel Montaj</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors">
+                      <CheckIcon />
+                      <span>7/24 Destek</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -561,20 +611,26 @@ export function KampanyaDetayClient({ kampanya }: Props) {
         </div>
       </section>
 
-      {/* Content Sections */}
-      <section className="py-8 md:py-16 lg:py-24 bg-neutral-50 dark:bg-neutral-900/50">
-        <div className="container mx-auto px-4">
-          {/* Section Tabs */}
+      {/* Content Sections - Glass Morphism */}
+      <section className="py-8 md:py-16 lg:py-24 bg-gradient-to-b from-neutral-50 via-white to-neutral-50 dark:from-neutral-900/50 dark:via-neutral-900 dark:to-neutral-900/50 relative overflow-hidden">
+        {/* Background Blur Effects */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-20 left-1/4 w-96 h-96 bg-gradient-to-br from-blue-200/20 to-purple-200/20 dark:from-blue-900/10 dark:to-purple-900/10 rounded-full blur-3xl" />
+          <div className="absolute bottom-20 right-1/4 w-96 h-96 bg-gradient-to-br from-pink-200/20 to-orange-200/20 dark:from-pink-900/10 dark:to-orange-900/10 rounded-full blur-3xl" />
+        </div>
+
+        <div className="container mx-auto px-4 relative">
+          {/* Section Tabs - Glass Effect */}
           <div className="flex justify-center mb-6 md:mb-12 overflow-x-auto pb-4">
-            <div className="inline-flex items-center gap-1 md:gap-2 p-1 md:p-1.5 rounded-xl md:rounded-2xl bg-white dark:bg-neutral-800 shadow-lg">
+            <div className="inline-flex items-center gap-1 md:gap-2 p-1 md:p-1.5 rounded-xl md:rounded-2xl bg-white/95 dark:bg-neutral-800/95 backdrop-blur-sm shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.3)] border border-neutral-200/50 dark:border-neutral-700/50">
               {sections.map((section) => (
                 <button
                   key={section.id}
                   onClick={() => setActiveSection(section.id)}
-                  className={`flex items-center gap-1.5 px-3 py-2 md:px-5 md:py-3 rounded-lg md:rounded-xl font-medium text-sm md:text-base transition-all whitespace-nowrap ${
+                  className={`flex items-center gap-1.5 px-3 py-2 md:px-5 md:py-3 rounded-lg md:rounded-xl font-medium text-sm md:text-base transition-all duration-500 whitespace-nowrap ${
                     activeSection === section.id
-                      ? "text-white shadow-lg"
-                      : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-700"
+                      ? "text-white shadow-lg scale-105"
+                      : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100/80 dark:hover:bg-neutral-700/80 hover:scale-102"
                   }`}
                   style={activeSection === section.id ? { backgroundColor: theme.primary } : {}}
                 >
@@ -595,7 +651,7 @@ export function KampanyaDetayClient({ kampanya }: Props) {
               transition={{ duration: 0.3 }}
               className="max-w-4xl mx-auto"
             >
-              {/* Paket İçeriği */}
+              {/* Paket İçeriği - Glass Cards */}
               {activeSection === "paket" && paketIcerigi.length > 0 && (
                 <div className="grid sm:grid-cols-2 gap-4">
                   {paketIcerigi.map((item, i) => (
@@ -604,17 +660,20 @@ export function KampanyaDetayClient({ kampanya }: Props) {
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: i * 0.05 }}
-                      className="flex items-center gap-4 p-5 bg-white dark:bg-neutral-800 rounded-2xl shadow-sm hover:shadow-md transition-shadow"
+                      className="group relative flex items-center gap-4 p-5 bg-white/80 dark:bg-neutral-800/80 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-[0_12px_40px_rgba(0,0,0,0.1)] dark:hover:shadow-[0_12px_40px_rgba(0,0,0,0.3)] transition-all duration-500 hover:-translate-y-1 border border-neutral-200/50 dark:border-neutral-700/50"
                     >
+                      {/* Glow effect on hover */}
+                      <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br from-white/20 to-transparent dark:from-white/5 pointer-events-none" />
+                      
                       <div 
-                        className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+                        className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 shadow-inner relative z-10"
                         style={{ backgroundColor: `${theme.primary}15`, color: theme.primary }}
                       >
                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                           <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                         </svg>
                       </div>
-                      <span className="text-neutral-800 dark:text-neutral-200 font-medium">
+                      <span className="text-neutral-800 dark:text-neutral-200 font-medium relative z-10">
                         {item}
                       </span>
                     </motion.div>
@@ -622,7 +681,7 @@ export function KampanyaDetayClient({ kampanya }: Props) {
                 </div>
               )}
 
-              {/* Teknik Özellikler */}
+              {/* Teknik Özellikler - Enhanced Glass */}
               {activeSection === "teknik" && teknikOzellikler.length > 0 && (
                 <div className="grid gap-3">
                   {teknikOzellikler.map((item, i) => (
@@ -631,10 +690,13 @@ export function KampanyaDetayClient({ kampanya }: Props) {
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: i * 0.05 }}
-                      className="flex items-center gap-4 p-5 bg-white dark:bg-neutral-800 rounded-2xl shadow-sm"
+                      className="group relative flex items-center gap-4 p-5 bg-white/80 dark:bg-neutral-800/80 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-[0_12px_40px_rgba(0,0,0,0.1)] dark:hover:shadow-[0_12px_40px_rgba(0,0,0,0.3)] transition-all duration-500 border border-neutral-200/50 dark:border-neutral-700/50"
                     >
+                      {/* Hover line */}
+                      <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/25 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                      
                       <div 
-                        className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0"
+                        className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0 shadow-inner"
                         style={{ backgroundColor: `${theme.primary}15`, color: theme.primary }}
                       >
                         {i + 1}
@@ -647,7 +709,7 @@ export function KampanyaDetayClient({ kampanya }: Props) {
                 </div>
               )}
 
-              {/* Avantajlar */}
+              {/* Avantajlar - Premium Glass Cards */}
               {activeSection === "avantaj" && avantajlar.length > 0 && (
                 <div className="grid sm:grid-cols-2 gap-6">
                   {avantajlar.map((item, i) => (
@@ -656,15 +718,21 @@ export function KampanyaDetayClient({ kampanya }: Props) {
                       initial={{ opacity: 0, scale: 0.9 }}
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ delay: i * 0.05 }}
-                      className="relative p-6 bg-white dark:bg-neutral-800 rounded-2xl shadow-sm hover:shadow-lg transition-all group overflow-hidden"
+                      className="relative p-6 bg-white/80 dark:bg-neutral-800/80 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-[0_16px_50px_rgba(0,0,0,0.12)] dark:hover:shadow-[0_16px_50px_rgba(0,0,0,0.4)] transition-all duration-700 group overflow-hidden border border-neutral-200/50 dark:border-neutral-700/50 hover:-translate-y-2"
                     >
+                      {/* Background gradient on hover */}
+                      <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 bg-gradient-to-br from-white/30 via-white/10 to-transparent dark:from-white/10 dark:via-white/5 pointer-events-none" />
+                      
+                      {/* Top glow */}
+                      <div className="absolute -top-24 left-1/2 h-48 w-48 -translate-x-1/2 rounded-full bg-white/20 dark:bg-white/10 blur-3xl opacity-0 group-hover:opacity-100 group-hover:scale-125 transition-all duration-700" />
+                      
                       <div 
-                        className="absolute top-0 left-0 w-1 h-full rounded-l-2xl opacity-0 group-hover:opacity-100 transition-opacity"
+                        className="absolute top-0 left-0 w-1 h-full rounded-l-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                         style={{ backgroundColor: theme.primary }}
                       />
-                      <div className="flex items-start gap-4">
+                      <div className="flex items-start gap-4 relative z-10">
                         <div 
-                          className="w-12 h-12 rounded-2xl flex items-center justify-center text-white shadow-lg flex-shrink-0"
+                          className="w-12 h-12 rounded-2xl flex items-center justify-center text-white shadow-lg flex-shrink-0 group-hover:scale-110 transition-transform duration-500"
                           style={{ background: `linear-gradient(135deg, ${theme.primary}, ${theme.primary}dd)` }}
                         >
                           <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -677,12 +745,15 @@ export function KampanyaDetayClient({ kampanya }: Props) {
                           </h3>
                         </div>
                       </div>
+                      
+                      {/* Bottom line */}
+                      <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/25 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                     </motion.div>
                   ))}
                 </div>
               )}
 
-              {/* SSS */}
+              {/* SSS - Glass Accordion */}
               {activeSection === "sss" && sss.length > 0 && (
                 <div className="space-y-4">
                   {sss.map((item, i) => (
@@ -691,19 +762,19 @@ export function KampanyaDetayClient({ kampanya }: Props) {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: i * 0.05 }}
-                      className="bg-white dark:bg-neutral-800 rounded-2xl shadow-sm overflow-hidden"
+                      className="group bg-white/80 dark:bg-neutral-800/80 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-[0_12px_40px_rgba(0,0,0,0.1)] dark:hover:shadow-[0_12px_40px_rgba(0,0,0,0.3)] overflow-hidden border border-neutral-200/50 dark:border-neutral-700/50 transition-all duration-500"
                     >
                       <button
                         onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                        className="w-full flex items-center justify-between p-6 text-left"
+                        className="w-full flex items-center justify-between p-6 text-left hover:bg-neutral-50/50 dark:hover:bg-neutral-700/30 transition-colors duration-300"
                       >
                         <span className="font-semibold text-neutral-900 dark:text-white pr-4">
                           {item.soru}
                         </span>
                         <motion.div
                           animate={{ rotate: openFaq === i ? 180 : 0 }}
-                          className="flex-shrink-0"
-                          style={{ color: theme.primary }}
+                          className="flex-shrink-0 p-2 rounded-lg"
+                          style={{ color: theme.primary, backgroundColor: `${theme.primary}10` }}
                         >
                           <ChevronDownIcon />
                         </motion.div>
@@ -716,7 +787,7 @@ export function KampanyaDetayClient({ kampanya }: Props) {
                             exit={{ height: 0, opacity: 0 }}
                             transition={{ duration: 0.3 }}
                           >
-                            <div className="px-6 pb-6 text-neutral-600 dark:text-neutral-400 leading-relaxed border-t border-neutral-100 dark:border-neutral-700 pt-4">
+                            <div className="px-6 pb-6 text-neutral-600 dark:text-neutral-400 leading-relaxed border-t border-neutral-100/50 dark:border-neutral-700/50 pt-4">
                               {item.cevap}
                             </div>
                           </motion.div>
@@ -868,6 +939,60 @@ export function KampanyaDetayClient({ kampanya }: Props) {
           </motion.div>
         </div>
       </section>
+
+      {/* Mobile Sticky Bottom Bar */}
+      <AnimatePresence>
+        {isSticky && (
+          <motion.div
+            initial={{ y: 100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 100, opacity: 0 }}
+            className="fixed bottom-0 left-0 right-0 z-[60] border-t border-neutral-200 dark:border-neutral-800 bg-white/90 dark:bg-neutral-900/90 backdrop-blur-md shadow-2xl lg:hidden"
+          >
+            <div className="px-4 py-3">
+              <div className="flex items-center justify-between gap-3">
+                <div className="min-w-0">
+                  <div className="text-xs text-neutral-500">Kampanya Fiyatı</div>
+                  {kampanya.fiyat_usd && fiyatTRY ? (
+                    <div className="flex items-center gap-2">
+                      <div className="text-lg font-bold" style={{ color: theme.primary }}>
+                        ${kampanya.fiyat_usd}
+                      </div>
+                      <span className="text-neutral-400 text-sm">/</span>
+                      <div className="text-lg font-bold" style={{ color: theme.primary }}>
+                        {fiyatTRY} ₺
+                      </div>
+                    </div>
+                  ) : kampanya.fiyat ? (
+                    <div className="text-lg font-bold" style={{ color: theme.primary }}>
+                      {kampanya.fiyat}
+                    </div>
+                  ) : null}
+                </div>
+                <div className="flex items-center gap-2">
+                  <a
+                    href={whatsappLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-white font-semibold shadow-lg hover:opacity-90 transition"
+                    style={{ backgroundColor: theme.primary }}
+                  >
+                    <WhatsAppIcon />
+                    Satın Al
+                  </a>
+                  <a
+                    href="tel:+905454506587"
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-white font-semibold hover:bg-neutral-200 dark:hover:bg-neutral-700 transition"
+                  >
+                    <PhoneIcon />
+                    Ara
+                  </a>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Back Link */}
       <section className="py-12 border-t border-neutral-200 dark:border-neutral-800">

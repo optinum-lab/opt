@@ -80,28 +80,28 @@ export function Hero() {
           className="text-center max-w-5xl mx-auto"
         >
           {/* Floating Badge */}
-          <motion.div variants={heroSubtitle} className="mb-8">
+          <motion.div variants={heroSubtitle} className="mb-6">
             <Badge 
               variant="primary" 
               size="md" 
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-red-500/10 via-rose-500/10 to-red-400/10 border border-white/10 dark:border-white/5 backdrop-blur-sm"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-500/10 dark:bg-red-500/20 border border-red-500/20 backdrop-blur-sm hover:bg-red-500/15 transition-colors duration-300"
             >
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
               </span>
-              <span className="text-sm font-medium">Yeni Nesil Güvenlik Teknolojisi</span>
+              <span className="text-sm font-semibold text-red-600 dark:text-red-400">Yeni Nesil Güvenlik Teknolojisi</span>
             </Badge>
           </motion.div>
 
           {/* Main Headline */}
           <motion.h1
             variants={heroTitle}
-            className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[0.95] mb-8"
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight leading-[1.1] mb-6"
           >
-            <span className="block text-foreground">Güvenlikte</span>
-            <span className="block mt-2 bg-gradient-to-r from-red-600 via-red-500 to-rose-400 bg-clip-text text-transparent">
-              Yeni Standart
+            <span className="block text-foreground mb-2">Güvenliğin</span>
+            <span className="block bg-gradient-to-r from-red-600 via-red-500 to-rose-500 bg-clip-text text-transparent">
+              Yeni Adresi
             </span>
           </motion.h1>
 
@@ -117,11 +117,11 @@ export function Hero() {
           {/* CTA Buttons */}
           <motion.div
             variants={heroCTA}
-            className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16"
+            className="flex flex-col sm:flex-row gap-3 justify-center items-center mb-12"
           >
             <Button 
               size="lg" 
-              className="group relative overflow-hidden bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-600 text-white px-8 py-6 text-base rounded-full shadow-2xl shadow-red-500/30 transition-all duration-300 hover:shadow-red-500/50 hover:scale-105"
+              className="group relative overflow-hidden bg-red-500 hover:bg-red-600 text-white px-8 py-4 text-base font-semibold rounded-xl shadow-lg shadow-red-500/25 transition-all duration-300 hover:shadow-red-500/40 hover:scale-[1.02] active:scale-[0.98]"
             >
               <span className="relative z-10 flex items-center gap-2">
                 <Icon 
@@ -139,10 +139,10 @@ export function Hero() {
             <Button 
               variant="ghost" 
               size="lg" 
-              className="group px-8 py-6 text-base rounded-full hover:bg-red-500/5 border border-red-500/20 transition-all duration-300"
+              className="group px-8 py-4 text-base font-semibold rounded-xl hover:bg-neutral-100 dark:hover:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 transition-all duration-300"
             >
               <Icon name="phone" size={18} className="mr-2 text-red-500" />
-              <span>Bizi Arayın</span>
+              <span>0545 450 65 87</span>
             </Button>
           </motion.div>
 

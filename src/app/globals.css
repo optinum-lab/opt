@@ -8,6 +8,11 @@
    Apple-inspired minimalism with glassmorphism
    ============================================ */
 
+/* Font Configuration - Poppins */
+@theme {
+  --font-sans: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
+}
+
 /* Custom CSS Variables for theming */
 :root {
   /* Light mode colors */
