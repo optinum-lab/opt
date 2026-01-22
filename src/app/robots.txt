@@ -9,6 +9,10 @@ Allow: /urunler/
 Allow: /urunler/kategori/
 Allow: /yasal/
 
+# Kampanya Sayfaları - YÜKSEK SEO ÖNCELİĞİ
+Allow: /montaj-kampanyalarimiz/
+Allow: /kampanyalarimiz/
+
 # Güvenlik kategorileri - Yüksek SEO önceliği
 Allow: /urunler/kategori/kamera
 Allow: /urunler/kategori/alarm-sistemi

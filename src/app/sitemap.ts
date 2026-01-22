@@ -1,9 +1,17 @@
 import { MetadataRoute } from 'next';
 import { tumSluglarıGetirServer } from '@/lib/product-utils';
+import { createClient as createSupabaseClient } from '@supabase/supabase-js';
+
+// Sitemap için cookie-free Supabase client (build time'da çalışır)
+const supabaseStatic = createSupabaseClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
 
 /**
  * Sitemap Generator
  * SEO için optimize edilmiş sitemap - Supabase Backend
+ * Kampanyalar yüksek öncelikli
  */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://www.mattech.com.tr';
@@ -16,6 +24,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'daily' as const,
       priority: 1.0,
     },
+    // Montaj Kampanyaları - EN YÜKSEK ÖNCELİK (Ana sayfa ile eşit)
+    {
+      url: `${baseUrl}/montaj-kampanyalarimiz`,
+      lastModified: new Date(),
+      changeFrequency: 'daily' as const,
+      priority: 1.0,
+    },
     {
       url: `${baseUrl}/urunler`,
       lastModified: new Date(),
@@ -23,6 +38,27 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.9,
     },
   ];
+
+  // Kampanya Detay Sayfaları - YÜKSEK ÖNCELİK (Supabase'den)
+  let kampanyaPages: MetadataRoute.Sitemap = [];
+  try {
+    const { data: kampanyalar } = await supabaseStatic
+      .from('kampanyalar')
+      .select('slug, updated_at')
+      .eq('aktif', true)
+      .order('sira', { ascending: true });
+    
+    if (kampanyalar && kampanyalar.length > 0) {
+      kampanyaPages = kampanyalar.map((k) => ({
+        url: `${baseUrl}/montaj-kampanyalarimiz/${k.slug}`,
+        lastModified: k.updated_at ? new Date(k.updated_at) : new Date(),
+        changeFrequency: 'daily' as const,
+        priority: 0.95, // Ürünlerden yüksek öncelik
+      }));
+    }
+  } catch (error) {
+    console.error('Sitemap kampanya çekme hatası:', error);
+  }
 
   // Hizmet/Kategori sayfaları - SEO için önemli
   const categories = [
@@ -71,5 +107,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.3,
   }));
 
-  return [...routes, ...categoryPages, ...productPages, ...legalRoutes];
+  // Kampanyalar önce gelsin (SEO için önemli)
+  return [...routes, ...kampanyaPages, ...categoryPages, ...productPages, ...legalRoutes];
 }

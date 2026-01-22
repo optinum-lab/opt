@@ -5,8 +5,27 @@
 
 import { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
+import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 import { notFound } from "next/navigation";
 import { KampanyaDetayClient } from "./KampanyaDetayClient";
+
+// Static generation için cookie-free Supabase client
+const supabaseStatic = createSupabaseClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
+
+// Static generation için kampanya slug'larını getir
+export async function generateStaticParams() {
+  const { data: kampanyalar } = await supabaseStatic
+    .from('kampanyalar')
+    .select('slug')
+    .eq('aktif', true);
+
+  return (kampanyalar || []).map((k) => ({
+    slug: k.slug,
+  }));
+}
 
 export interface KampanyaDetay {
   id: number;

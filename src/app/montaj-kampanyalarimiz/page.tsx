@@ -21,6 +21,20 @@ export const metadata: Metadata = {
       "Montaj dahil güvenlik kamera paketleri. Profesyonel kurulum, garanti ve teknik destek bir arada.",
     url: "https://www.mattech.com.tr/montaj-kampanyalarimiz",
     type: "website",
+    images: [
+      {
+        url: "https://www.mattech.com.tr/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Mat Tech Montaj Dahil Güvenlik Kamerası Kampanyaları",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Montaj Kampanyalarımız | Mat Tech",
+    description: "Montaj dahil güvenlik kamera paketleri. Profesyonel kurulum, garanti ve teknik destek.",
+    images: ["https://www.mattech.com.tr/og-image.png"],
   },
   keywords: [
     "montaj dahil kamera sistemi",
@@ -122,8 +136,65 @@ export default async function KampanyalarimizPage() {
     ? kampanyalar 
     : DEFAULT_KAMPANYALAR;
 
+  // ItemList JSON-LD Schema for SEO (Kampanya Listesi)
+  const itemListSchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Montaj Dahil Güvenlik Kamera Kampanyaları",
+    "description": "Mat Tech güvenlik sistemleri montaj dahil kampanya paketleri",
+    "numberOfItems": kampanyaListesi.length,
+    "itemListElement": kampanyaListesi.map((k, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "url": `https://www.mattech.com.tr/montaj-kampanyalarimiz/${k.slug}`,
+      "name": k.baslik,
+      "item": {
+        "@type": "Product",
+        "name": k.baslik,
+        "description": k.aciklama,
+        "offers": {
+          "@type": "Offer",
+          "priceCurrency": "TRY",
+          "availability": "https://schema.org/InStock"
+        }
+      }
+    }))
+  };
+
+  // OfferCatalog Schema - Google için kampanya kataloğu
+  const offerCatalogSchema = {
+    "@context": "https://schema.org",
+    "@type": "OfferCatalog",
+    "name": "Mat Tech Güvenlik Kamera Kampanyaları",
+    "description": "Montaj dahil profesyonel güvenlik kamera sistemleri",
+    "url": "https://www.mattech.com.tr/montaj-kampanyalarimiz",
+    "numberOfItems": kampanyaListesi.length,
+    "itemListElement": kampanyaListesi.map((k) => ({
+      "@type": "Offer",
+      "name": k.baslik,
+      "description": k.aciklama,
+      "url": `https://www.mattech.com.tr/montaj-kampanyalarimiz/${k.slug}`,
+      "availability": "https://schema.org/InStock",
+      "seller": {
+        "@type": "Organization",
+        "name": "mattech - Mat Tech Güvenlik Sistemleri"
+      }
+    }))
+  };
+
   return (
-    <main className="min-h-screen bg-background pt-20 md:pt-24">
+    <>
+      {/* JSON-LD Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(offerCatalogSchema) }}
+      />
+      
+      <main className="min-h-screen bg-background pt-20 md:pt-24">
       {/* Hero Section - Kompakt */}
       <section className="relative py-12 md:py-16 overflow-hidden">
         {/* Background gradient */}
@@ -195,5 +266,6 @@ export default async function KampanyalarimizPage() {
       {/* Kampanya Grid */}
       <KampanyaGrid kampanyalar={kampanyaListesi} />
     </main>
+    </>
   );
 }
