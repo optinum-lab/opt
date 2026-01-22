@@ -74,15 +74,15 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Kategoriler Links */}
+          {/* Kampanyalar Links */}
           <div>
-            <h3 className="font-semibold text-foreground mb-4">Kategoriler</h3>
+            <h3 className="font-semibold text-foreground mb-4">Kampanyalar</h3>
             <ul className="space-y-3">
-              <li><FooterLink href="/urunler/kategori/kayit-cihazi">Kayıt Cihazı</FooterLink></li>
-              <li><FooterLink href="/urunler/kategori/kamera">Kamera</FooterLink></li>
-              <li><FooterLink href="/urunler/kategori/alarm-sistemi">Alarm Sistemi</FooterLink></li>
-              <li><FooterLink href="/urunler/kategori/access-kontrol">Access Kontrol</FooterLink></li>
-              <li><FooterLink href="/urunler/kategori/ekipmanlar">Ekipmanlar</FooterLink></li>
+              <li><FooterLink href="/montaj-kampanyalarimiz">Montaj Kampanyaları</FooterLink></li>
+              <li><FooterLink href="/montaj-kampanyalarimiz/4-kamerali-paket">4 Kameralı Paket</FooterLink></li>
+              <li><FooterLink href="/montaj-kampanyalarimiz/6-kamerali-paket">6 Kameralı Paket</FooterLink></li>
+              <li><FooterLink href="/montaj-kampanyalarimiz/8-kamerali-paket">8 Kameralı Paket</FooterLink></li>
+              <li><FooterLink href="/montaj-kampanyalarimiz/10-kamerali-paket">10 Kameralı Paket</FooterLink></li>
               <li><FooterLink href="/urunler">Tüm Ürünler</FooterLink></li>
             </ul>
           </div>
